@@ -1,0 +1,35 @@
+/* GlobalStyles.css */
+
+/* External Fonts */
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&display=swap");
+
+/* Local CSS */
+@import url("./bootstrap/css/bootstrap.min.css");
+@import url("./FontAwesome.css");
+@import url("./fonts/fontawesome-all.min.css");
+@import url("./fonts/font-awesome.min.css");
+@import url("./fonts/fontawesome5-overrides.min.css");
+@import url("./bootstrap/css/bootstrap.min.css");
+@import url("./fonts/font-awesome.min.css");
+@import url("./Login-Form-Basic-icons.css");
+@import url("./Account-setting-or-edit-profile.css");
+@import url("./Profile-with-data-and-skills.css");
+@import url("./bootstrap/css/bootstrap.min-1.css");
+@import url("./bootstrap/css/bootstrap.min.css");
+@import url("./fonts/fontawesome-all.min.css");
+@import url("./fonts/font-awesome.min.css");
+@import url("./fonts/fontawesome5-overrides.min.css");
+@import url("./bootstrap/css/bootstrap.min.css");
+@import url("./fonts/font-awesome.min.css");
+@import url("./Account-setting-or-edit-profile.css");
+@import url("./Profile-with-data-and-skills.css");
+@import url("./bootstrap/css/bootstrap.min-1.css");
+@import url("./bootstrap/css/bootstrap.min.css");
+@import url("./fonts/fontawesome-all.min.css");
+@import url("./fonts/font-awesome.min.css");
+@import url("./fonts/fontawesome5-overrides.min.css");
+@import url("./bootstrap/css/bootstrap.min.css");
+@import url("./fonts/font-awesome.min.css");
+@import url("./Account-setting-or-edit-profile.css");
+@import url("./Profile-with-data-and-skills.css");
