@@ -1,0 +1,188 @@
+@import url("https://fonts.googleapis.com/css?family=Josefin+Sans");
+
+html {
+  font-family: "Cantarell", sans-serif;
+  background-color: #f5efe8;
+  font-size: 15px;
+}
+table,
+th,
+td {
+  border: 1px solid black;
+}
+
+input:focus {
+  background-color: yellow;
+  border: 5px solid black;
+  transition: ease-in-out, width 0.35s ease-in-out;
+}
+
+h1,
+h2,
+h3,
+thead {
+  font-family: "Sanchez", serif;
+}
+
+thead {
+  background-color: #3c7191;
+  border-style: solid;
+  color: #f5efe8;
+}
+
+.App {
+  background-color: #f5efe8;
+}
+.navbar .dropdown-menu .form-control {
+  height: 100px;
+  font-size: 40px;
+}
+nav {
+  height: 70px;
+  font-size: 30px;
+}
+
+.map {
+  height: 25rem;
+  width: 25rem;
+  text-align: center;
+}
+
+.page {
+  background-image: url("images/header.png");
+  background-repeat: no-repeat;
+  height: 105vh;
+  width: 100%;
+  background-color: #f4eee9;
+  background-position: center;
+  background-size: 100% auto;
+}
+
+#head_logo {
+  width: 80%;
+  height: auto;
+  position: relative;
+  margin: auto;
+}
+
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  display: inline-block;
+}
+
+.tag {
+  position: absolute;
+  bottom: 18vh;
+  left: 30%;
+  right: 25%;
+  color: black;
+  background-color: #f5efe8;
+  font-weight: bold;
+  font-size: 30px;
+  border-radius: 25px;
+}
+
+.logo-modal {
+  height: 200px;
+  width: auto;
+}
+
+.login-container {
+  margin: auto;
+  max-width: 300px;
+  height: 35vh;
+}
+
+.logo-image {
+  height: 30vh;
+}
+.nav_logo {
+  max-height: 70px;
+}
+.filter-section {
+  font-size: 20px;
+  position: absolute;
+  float: left;
+}
+#header-image {
+  display: flex;
+  justify-content: center;
+  height: 30vh;
+}
+#table {
+  font-size: 20px;
+  color: #282c34;
+}
+
+.table-header {
+  background-color: #97cde4;
+  color: #f5efe8;
+}
+
+.posts {
+  font-weight: bold;
+  width: 95%;
+}
+
+.page-item {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.stands-out-button {
+  background-color: #3c7191;
+  font-size: 25px;
+  color: #f5efe8;
+  border-radius: 12px;
+  padding: 0px 10px;
+  margin: 5px;
+}
+
+.login_button {
+  background-color: #808080;
+  font-size: 25px;
+  color: #f5efe8;
+  border-radius: 8px;
+  padding: 5px 20px;
+  margin: 5px;
+}
+
+.moredetailbutton {
+  background-color: #3c7191;
+  font-size: 15px;
+  color: #f5efe8;
+  border-radius: 12px;
+  width: 180px;
+  padding: 3px 3px;
+}
+
+.category {
+  font-size: 15px;
+  text-align-last: center;
+  font-weight: bold;
+  width: 150px;
+  height: 35px;
+  border-radius: 12px;
+  color: #f5efe8;
+  background-color: #3c7191;
+  border-width: medium;
+}
+
+.sort_button {
+  font-size: 15px;
+  font-weight: bold;
+  border-radius: 12px;
+  color: #f5efe8;
+  background-color: #3c7191;
+  border-width: medium;
+}
+
+.map {
+  height: 25rem;
+  width: 25rem;
+  text-align: center;
+}
