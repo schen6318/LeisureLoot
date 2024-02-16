@@ -248,6 +248,32 @@ function myDB() {
     res.json(result);
   };
 
+  //iteration2-sissy: add points
+  myDB.addPoints = async (userId, pointsToAdd) => {
+    const collection = project_database.collection("userProfile");
+    try {
+      const numericPointsToAdd = Number(pointsToAdd);
+      if (isNaN(numericPointsToAdd)) {
+        throw new Error("pointsToAdd must be a numeric value");
+      }
+
+      const result = await collection.findOneAndUpdate(
+        { _id: new ObjectId(userId) },
+        { $inc: { points: numericPointsToAdd } },
+        { returnOriginal: false }
+      );
+
+      if (result.value) {
+        return { updatedPoints: result.value.points };
+      } else {
+        return { error: "User not found" };
+      }
+    } catch (e) {
+      console.error("Error updating user points in DB:", e);
+      throw e;
+    }
+  };
+
   return myDB;
 }
 

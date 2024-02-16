@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "./Navbar.js";
 import Footer from "./Footer.js";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+import AddPoints from "./AddPoints.js";
 
 function Profile() {
   const navigate = useNavigate();
@@ -17,7 +19,10 @@ function Profile() {
     zip: "",
     category: "",
     description: "",
+    points: 0, //initialize points
   });
+
+  const [showAddPoints, setShowAddPoints] = useState(false);
 
   useEffect(() => {
     if (userId) {
@@ -75,6 +80,7 @@ function Profile() {
           zip: data.zip || "",
           category: data.category || "",
           description: data.description || "",
+          points: data.points || 0,
         });
       } else {
         console.error("Failed to fetch profile");
@@ -88,6 +94,11 @@ function Profile() {
     if (userId) {
       fetchUserProfile(userId);
     }
+  };
+
+  //open add points modal
+  const handleAddPoints = () => {
+    setShowAddPoints(true);
   };
 
   return (
@@ -124,6 +135,29 @@ function Profile() {
                         {profile.description ||
                           `Your skill description will be displayed here. For example, I'm Yuki. Full Stack Designer I enjoy creating user-centric, delightful and human experiences.`}
                       </p>
+                    </div>
+                    <div className="about">
+                      <h5>Points: {profile.points}</h5>
+                      <button
+                        className="btn btn-primary"
+                        onClick={handleAddPoints}
+                      >
+                        Add Points
+                      </button>
+                      {showAddPoints && (
+                        <PayPalScriptProvider
+                          options={{
+                            "client-id":
+                              "ARpYR5BA7ypNC7jb8hc6m5kugA-_fxpSXHFvZCuxhSaBzERPOzmcP8GKvWx3vOZ9yOCuKXiyGOOq7aF1",
+                          }}
+                        >
+                          <AddPoints
+                            show={showAddPoints}
+                            handleClose={() => setShowAddPoints(false)}
+                            userId={userId}
+                          />
+                        </PayPalScriptProvider>
+                      )}
                     </div>
                   </div>
                 </div>

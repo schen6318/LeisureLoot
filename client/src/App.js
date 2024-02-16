@@ -6,8 +6,8 @@ import Signup from "./Components/Signup";
 import Profile from "./Components/Profile";
 import PostForm2 from "./Components/PostForm2";
 import OfferHelp from "./Components/OfferHelpPage";
-import SeekHelp from "./Components/SeekHelpPage";
 import SubmitForm from "./Components/submitform";
+import AddPoints from "./Components/AddPoints";
 
 function App() {
   return (
@@ -18,13 +18,19 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/offerHelp" element={<OfferHelp />} />
-          {/* <Route path="/seekHelp" element={<SeekHelp />} /> */}
-
           <Route
             path="/profile/:userId"
             element={
               <ProtectedRoute>
                 <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/addPoints"
+            element={
+              <ProtectedRoute>
+                <AddPoints />
               </ProtectedRoute>
             }
           />
