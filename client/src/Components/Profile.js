@@ -4,6 +4,7 @@ import Navbar from "./Navbar.js";
 import Footer from "./Footer.js";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 import AddPoints from "./AddPoints.js";
+import RefreshIcon from "../assets/img/refresh.png";
 
 function Profile() {
   const navigate = useNavigate();
@@ -101,6 +102,11 @@ function Profile() {
     setShowAddPoints(true);
   };
 
+  // refresh user points
+  const handleRefresh = () => {
+    fetchUserProfile(userId);
+  };
+
   return (
     <>
       <Navbar />
@@ -138,11 +144,26 @@ function Profile() {
                     </div>
                     <div className="about">
                       <h5>Points: {profile.points}</h5>
+
                       <button
                         className="btn btn-primary"
                         onClick={handleAddPoints}
                       >
                         Add Points
+                      </button>
+                      <button
+                        onClick={handleRefresh}
+                        style={{
+                          border: "none",
+                          background: "none",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <img
+                          src={RefreshIcon}
+                          alt="Refresh Points"
+                          style={{ width: "24px", height: "24px" }}
+                        />
                       </button>
                       {showAddPoints && (
                         <PayPalScriptProvider

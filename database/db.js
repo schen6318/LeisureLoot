@@ -83,7 +83,7 @@ function myDB() {
         return null;
       }
       profile = { id: profile._id.toString(), ...profile, _id: undefined };
-      console.log(profile);
+      // console.log(profile);
       return profile;
     } catch (e) {
       console.error("Error fetching user profile:", e);
