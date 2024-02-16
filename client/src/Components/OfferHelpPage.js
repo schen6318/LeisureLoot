@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import OfferHelpTable from "./OfferHelpTable.js";
 import Navbar from "./Navbar.js";
-import Footer from "./Footer.js";
 import Button from "react-bootstrap/Button";
 //From here, seek help means posts that seek help
 //offer help means posts that offer help
@@ -314,8 +313,8 @@ function OfferHelpPage() {
 
   //the helper tables with all the offers (Offer help)
   function SeekTableMain() {
-    let HelperFiltered = filter_on_post(Seeks, Category_help_Select);
-    console.log(loginUsername);
+    let openData = Seeks.filter(item => item["Status"] !== 'Approved');
+    let HelperFiltered = filter_on_post(openData, Category_help_Select);
     return (
       <Container fluid className={"mt-5 table"}>
         <Row>
@@ -335,16 +334,16 @@ function OfferHelpPage() {
 
   return (
     <>
-      <Navbar />
       <div className="container-fluid">
-        <br />
+        <Navbar login={login} />
+        <br /> <br /> <br /> <br />
+        <br /> <br />
         <h1>Help Requests</h1>
         <h2 style={{ fontSize: "25px" }}>
           If you need someone to get things done, find one here!
         </h2>
         <SeekTableMain />
       </div>
-      <Footer />
     </>
   );
 }

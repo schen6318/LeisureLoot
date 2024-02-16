@@ -12,7 +12,7 @@ function myDB() {
     const client = new MongoClient(uri);
     try {
       await client.connect();
-      project_database = client.db("project_database123");
+      project_database = client.db("leisureloot");
       console.log("Connected successfully to server");
     } catch (e) {
       console.error("Connection error:", e);
@@ -110,12 +110,8 @@ function myDB() {
   //以下来自于Bob
   myDB.insert_post = async (req, res) => {
     let feedback_database;
-    // console.log("Inserting:::", req.body);
-    if (req.body.Mode === "OfferHelp") {
-      feedback_database = project_database.collection("helper");
-    } else if (req.body.Mode === "SeekHelp") {
-      feedback_database = project_database.collection("posts");
-    }
+    //Sophia修改：因为提交need时去掉了选择offerHelp，都是seekHelp，所以这里不需要判断了
+    feedback_database = project_database.collection("posts");
 
     req.body["username"] = req.user.username;
     await feedback_database.insertOne(req.body);

@@ -5,6 +5,7 @@ import usePlacesAutocomplete, {
 import useOnclickOutside from "react-cool-onclickoutside";
 import React from "react";
 import PropTypes from "prop-types";
+import { useEffect } from 'react';
 
 function AddressAutoComplete(props) {
   const {
@@ -82,6 +83,24 @@ function AddressAutoComplete(props) {
         }
       });
     };
+
+    useEffect(() => {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        getGeocode({ location: { lat: position.coords.latitude, lng: position.coords.longitude } })
+          .then((results) => {
+            const address = results[0].formatted_address;
+            setValue(address);
+            props.setaddress(address);
+            props.setlatitude(position.coords.latitude);
+            props.setlongitude(position.coords.longitude);
+          })
+          .catch((error) => {
+            console.log("Error in getGeocode: ", error);
+          });
+      }, function(error) {
+        console.log("Error in getCurrentPosition: ", error);
+      });
+    }, []);
 
   const renderSuggestions = () =>
     data.map((suggestion, i) => {

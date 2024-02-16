@@ -152,7 +152,8 @@ nav {
 }
 
 .moredetailbutton {
-  background-color: #3c7191;
+  background-color: #18bc9c;
+  border-color: #18bc9c;
   font-size: 15px;
   color: #f5efe8;
   border-radius: 12px;

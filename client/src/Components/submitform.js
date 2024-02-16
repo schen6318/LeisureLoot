@@ -113,13 +113,13 @@ function SubmitForm() {
                       value={Mode}
                       onChange={modeChange}
                     >
-                      <option
+                      {/* <option
                         key="offer"
                         value="OfferHelp"
                         onChange={modeChange}
                       >
                         Offer Help
-                      </option>
+                      </option> */}
                       <option key="seek" value="SeekHelp" onChange={modeChange}>
                         Seek Help
                       </option>

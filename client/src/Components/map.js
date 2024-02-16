@@ -1,7 +1,6 @@
-import { React, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import GoogleMapReact from "google-map-react";
 import PropTypes from "prop-types";
-// require("dotenv").config();
 
 const CenterRedCirclePinpoint = () => (
   <div
@@ -21,16 +20,12 @@ const CenterRedCirclePinpoint = () => (
   </div>
 );
 function Deleter() {
-  // Ugly hack to make google maps pass the axe audit
   const mapRef = useRef();
   useEffect(() => {
-    console.log("ref", mapRef.current);
-
     try {
       mapRef.current.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.removeAttribute(
         "aria-roledescription"
       );
-      console.log("removing aria-roledescription", mapRef.current);
     } catch (er) {
       console.log("deleter failed, maybe the map wasn't ready?", er);
     }
@@ -47,7 +42,7 @@ function Map(props) {
     },
     zoom: 11,
   };
-  // document.getElementsByTagName("GoogleMapReact")[0].removeAttribute("class");
+
   return (
     <div className={"map"}>
       <GoogleMapReact
