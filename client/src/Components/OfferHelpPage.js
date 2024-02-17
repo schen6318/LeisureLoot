@@ -340,7 +340,7 @@ function OfferHelpPage() {
         <br /> <br />
         <h1>Help Requests</h1>
         <h2 style={{ fontSize: "25px" }}>
-          If you need someone to get things done, find one here!
+          You can find needs and take order, check details here!
         </h2>
         <SeekTableMain />
       </div>

@@ -47,7 +47,7 @@ function PostForm2() {
               <th scope="col">Date for task</th>
               <th scope="col">Zip Code</th>
               <th scope="col">Address</th>
-              <th scope="col">Post Type</th>
+              
               <th scope="col">Post Status</th>
               <th scope="col">Comments</th>
               <th scope="col">Action</th>
@@ -64,7 +64,7 @@ function PostForm2() {
                 <td>{p["Date for task"]}</td>
                 <td>{p["Zip Code"]}</td>
                 <td>{p.Address}</td>
-                <td>{p.Mode}</td>
+                
                 <td>{p.Status}</td>
                 <td>
                   <MessageReceived

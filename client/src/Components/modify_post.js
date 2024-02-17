@@ -14,7 +14,7 @@ function ModifyPost(props) {
   let [GeoState, setGeoState] = useState(props.information["State"]);
   let [Longitude, setLongitude] = useState(props.information.Longitude);
   let [Error, setError] = useState("");
-  //Change is not permitted between Seek Help and Offer Help.
+  
   const Mode = props.information.Mode;
   const id = props.information._id;
   const categoryOptions = [
@@ -59,7 +59,7 @@ function ModifyPost(props) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           _id: id,
-          Mode: Mode,
+          Mode: "SeekHelp",
           Description: Subject,
           Category: Category,
           "Ideal Price": parseInt(Price),
@@ -93,7 +93,7 @@ function ModifyPost(props) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           _id: id,
-          Mode: Mode,
+          Mode: "SeekHelp",
           Description: Subject,
           Category: Category,
           "Ideal Price": Price,

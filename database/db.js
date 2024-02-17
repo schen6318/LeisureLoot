@@ -122,11 +122,7 @@ function myDB() {
   myDB.edit_post = async (req, res) => {
     let target_database;
     let json = req.body;
-    if (json.Mode === "SeekHelp") {
-      target_database = project_database.collection("posts");
-    } else if (json.Mode === "OfferHelp") {
-      target_database = project_database.collection("helper");
-    }
+    target_database = project_database.collection("posts");
     const edit = {
       $set: {
         Description: json.Description,
@@ -149,11 +145,7 @@ function myDB() {
   myDB.update_post_status = async (req, res) => {
     let target_database;
     let json = req.body;
-    if (json.Mode === "SeekHelp") {
-      target_database = project_database.collection("posts");
-    } else if (json.Mode === "OfferHelp") {
-      target_database = project_database.collection("helper");
-    }
+    target_database = project_database.collection("posts");
     const update = {
       $set: {
         Status: json.Status,
@@ -168,11 +160,7 @@ function myDB() {
   myDB.delete_post = async (req, res) => {
     let target_database;
     let json = req.body;
-    if (json.Mode === "SeekHelp") {
-      target_database = project_database.collection("posts");
-    } else if (json.Mode === "OfferHelp") {
-      target_database = project_database.collection("helper");
-    }
+    target_database = project_database.collection("posts");
 
     const query = { _id: new ObjectId(json._id) };
     await target_database.deleteOne(query);
@@ -199,15 +187,15 @@ function myDB() {
   };
 
   //get all the offer help posts in the database.
-  myDB.getAllHelpOfferPosts = async (bol, res) => {
-    // console.log("Loading all posts from database.");
-    // console.log(bol);
-    const post_db = project_database.collection("helper");
-    let result = await post_db.find({}).sort({ "Ideal Price": bol }).toArray();
-    res.json(result);
-    // console.log("loaded");
-    return result;
-  };
+  // myDB.getAllHelpOfferPosts = async (bol, res) => {
+  //   // console.log("Loading all posts from database.");
+  //   // console.log(bol);
+  //   const post_db = project_database.collection("helper");
+  //   let result = await post_db.find({}).sort({ "Ideal Price": bol }).toArray();
+  //   res.json(result);
+  //   // console.log("loaded");
+  //   return result;
+  // };
 
   //get all the seek help posts in the database.
   myDB.getAllSeekPosts = async (bol, res) => {

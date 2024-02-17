@@ -48,7 +48,7 @@ function Navbar({ login }) {
               </Link>
             </li>
 
-            {user ? (
+            {login ? (
               <>
                 <li className="nav-item mx-0 mx-lg-1">
                   <Link

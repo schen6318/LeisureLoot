@@ -12,7 +12,6 @@ function SubmitForm() {
   let [Latitude, setLatitude] = useState(0);
   let [State, setState] = useState("");
   let [Longitude, setLongitude] = useState(0);
-  let [Mode, setMode] = useState("OfferHelp");
   let [show, setShow] = useState(false);
   let [Errora, setError] = useState("");
   // Add a new state variable for status
@@ -39,9 +38,7 @@ function SubmitForm() {
   let dateChange = (event) => {
     setDate(event.target.value);
   };
-  let modeChange = (event) => {
-    setMode(event.target.value);
-  };
+
 
   //when the user hit the submit button of the form
   const handleSubmit = async () => {
@@ -60,7 +57,7 @@ function SubmitForm() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            Mode: Mode,
+            Mode: "SeekHelp",
             Description: Subject,
             Category: Category,
             "Ideal Price": parseInt(Price),
@@ -106,28 +103,12 @@ function SubmitForm() {
                 <div className="md-form">
                   <p>{Errora}</p>
                   <div className="md-form mb-0">
-                    I am posting to...
-                    <select
-                      className={"ml-2 category"}
-                      aria-label="categorySelect"
-                      value={Mode}
-                      onChange={modeChange}
-                    >
-                      {/* <option
-                        key="offer"
-                        value="OfferHelp"
-                        onChange={modeChange}
-                      >
-                        Offer Help
-                      </option> */}
-                      <option key="seek" value="SeekHelp" onChange={modeChange}>
-                        Seek Help
-                      </option>
-                    </select>
+                    I am posting to seek help
+                    
                   </div>
                 </div>
 
-                {/*<div className="row mt-2 mb-2">*/}
+                
                 <select
                   className="category my-3"
                   aria-label="category"
@@ -142,7 +123,7 @@ function SubmitForm() {
                     </option>
                   ))}
                 </select>
-                {/*</div>*/}
+               
               </div>
             </div>
 
