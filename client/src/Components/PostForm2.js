@@ -156,32 +156,27 @@ function PostForm2() {
 
   return (
     <>
-      <Navbar login={login} />
-      {login && (
-        <section className="container mb-4">
-          <h1 className="h1-responsive font-weight-bold text-center my-4">
-            Welcome!
-          </h1>
-          <SubmitForm />
-        </section>
-      )}
-      {login && (
+      <Navbar />
+      <header className="text-center text-white bg-primary masthead">
+        <h1 style={{ fontSize: "3rem" }}>Welcome</h1>
+      </header>
+      <div className="container text-center">
+        <p></p>
+        <SubmitForm />
+  
         <section className="pt-5 container">
           <h2 className="h2-responsive font-weight-bold text-left my-4">
             My Published Posts
           </h2>
           <LoadPost />
         </section>
-      )}
-  
-      {login && (
         <section className="pt-5 container">
           <h2 className="h2-responsive font-weight-bold text-left my-4">
             My Commented Posts
           </h2>
           <LoadOtherPost />
         </section>
-      )}
+      </div>
       <Footer />
     </>
   );
