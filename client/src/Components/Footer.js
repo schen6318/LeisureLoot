@@ -67,6 +67,7 @@ function Footer() {
                     <img
                       className="img-fluid mb-5"
                       src="assets/img/portfolio/cabin.png"
+                      alt="cabin"
                     />
                     <p className="mb-5">
                       Embrace the art of creation with wood. Whether you're a
@@ -118,6 +119,7 @@ function Footer() {
                     <img
                       className="img-fluid mb-5"
                       src="assets/img/portfolio/cake.png"
+                      alt="cake"
                     />
                     <p className="mb-5">
                       Delight with sweet and savory bakes. Share your passion
@@ -168,6 +170,7 @@ function Footer() {
                     <img
                       className="img-fluid mb-5"
                       src="assets/img/portfolio/circus.png"
+                      alt="circus"
                     />
                     <p className="mb-5">
                       Solve problems with code. Apply your analytical prowess to
@@ -219,6 +222,7 @@ function Footer() {
                     <img
                       className="img-fluid mb-5"
                       src="assets/img/portfolio/game.png"
+                      alt="game"
                     />
                     <p className="mb-5">
                       Visualize ideas with design. Use your creative flair to
@@ -269,6 +273,7 @@ function Footer() {
                     <img
                       className="img-fluid mb-5"
                       src="assets/img/portfolio/safe.png"
+                      alt="safe"
                     />
                     <p className="mb-5">
                       Cultivate growth and tranquility. Offer your green thumb
@@ -319,6 +324,7 @@ function Footer() {
                     <img
                       className="img-fluid mb-5"
                       src="assets/img/portfolio/submarine.png"
+                      alt="submarine"
                     />
                     <p className="mb-5">
                       Fix, repair, and restore. With a toolkit and know-how,

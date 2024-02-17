@@ -46,7 +46,7 @@ router.get("/profile/:userId", async (req, res) => {
     const userId = req.params.userId;
     const userProfile = await myDB.getUserProfile(userId);
     if (userProfile) {
-      console.log(userProfile);
+      // console.log(userProfile);
       res.json(userProfile);
     } else {
       res.status(404).send({ message: "User not found" });
@@ -141,6 +141,27 @@ router.post("/submit-message", async (req, res) => {
 router.get("/get-received-message", async (req, res) => {
   console.log("getting received messages...");
   await myDB.retrieveReceivedMessage(req, res);
+});
+
+//iteration2-sissy: update points
+router.post("/update-points", async (req, res) => {
+  try {
+    const { userId, pointsToAdd } = req.body;
+
+    const updateResult = await myDB.addPoints(userId, pointsToAdd);
+
+    if (updateResult.error) {
+      res.status(400).send({ message: updateResult.error });
+    } else {
+      res.send({
+        message: "Points updated successfully",
+        updatedPoints: updateResult.updatedPoints,
+      });
+    }
+  } catch (error) {
+    console.error("Error updating user points:", error);
+    res.status(500).send({ message: "Internal server error" });
+  }
 });
 
 module.exports = router;

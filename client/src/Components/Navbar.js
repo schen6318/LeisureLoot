@@ -7,9 +7,19 @@ function Navbar({ login }) {
   const { user, logout } = useUser();
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/logout", { method: "GET" });
+      if (response.ok) {
+        logout();
+        navigate("/");
+        console.log("Logged out successfully");
+      } else {
+        console.error("Logout failed");
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   };
 
   return (

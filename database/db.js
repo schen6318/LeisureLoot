@@ -83,7 +83,7 @@ function myDB() {
         return null;
       }
       profile = { id: profile._id.toString(), ...profile, _id: undefined };
-      console.log(profile);
+      // console.log(profile);
       return profile;
     } catch (e) {
       console.error("Error fetching user profile:", e);
@@ -230,6 +230,32 @@ function myDB() {
     const messagedb = project_database.collection("message");
     const result = await messagedb.find(filter).toArray();
     res.json(result);
+  };
+
+  //iteration2-sissy: add points
+  myDB.addPoints = async (userId, pointsToAdd) => {
+    const collection = project_database.collection("userProfile");
+    try {
+      const numericPointsToAdd = Number(pointsToAdd);
+      if (isNaN(numericPointsToAdd)) {
+        throw new Error("pointsToAdd must be a numeric value");
+      }
+
+      const result = await collection.findOneAndUpdate(
+        { _id: new ObjectId(userId) },
+        { $inc: { points: numericPointsToAdd } },
+        { returnOriginal: false }
+      );
+
+      if (result.value) {
+        return { updatedPoints: result.value.points };
+      } else {
+        return { error: "User not found" };
+      }
+    } catch (e) {
+      console.error("Error updating user points in DB:", e);
+      throw e;
+    }
   };
 
   return myDB;
