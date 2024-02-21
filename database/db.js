@@ -231,9 +231,25 @@ function myDB() {
     res
   ) => {
     const messagedb = project_database.collection("message");
+    let senderUser;
+    if (
+      typeof senderUsername === "object" &&
+      senderUsername !== null &&
+      senderUsername.username
+    ) {
+      senderUser = senderUsername.username;
+    } else if (typeof senderUsername === "string") {
+      senderUser = senderUsername;
+    } else {
+      console.error("Invalid senderUsername format");
+      res
+        .status(400)
+        .json({ status: "error", message: "Invalid senderUsername format" });
+      return;
+    }
     const write_info = {
       postid: postid,
-      senderUsername: senderUsername,
+      senderUsername: senderUser,
       receiverUsername: receiverUsername,
       message: message,
     };

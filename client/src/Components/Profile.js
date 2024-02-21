@@ -16,7 +16,7 @@ function Profile() {
     website: "",
     street: "",
     city: "",
-    state: "",
+    province: "",
     zip: "",
     category: "",
     description: "",
@@ -77,7 +77,7 @@ function Profile() {
           website: data.website || "",
           street: data.street || "",
           city: data.city || "",
-          state: data.state || "",
+          province: data.province || "",
           zip: data.zip || "",
           category: data.category || "",
           description: data.description || "",
@@ -298,18 +298,18 @@ function Profile() {
                         <div className="form-group">
                           <label
                             className="form-label form-label"
-                            htmlFor="state"
+                            htmlFor="province"
                           >
-                            State
+                            Province
                           </label>
                           <input
                             type="text"
                             className="form-control"
-                            id="state"
-                            name="state"
-                            value={profile.state}
+                            id="province"
+                            name="province"
+                            value={profile.province}
                             onChange={handleChange}
-                            placeholder="Enter State"
+                            placeholder="Enter Province"
                           />
                         </div>
                         <div className="form-group">
