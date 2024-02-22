@@ -86,7 +86,7 @@ function PostForm2() {
 
   return (
     <>
-      <Navbar />
+      <Navbar login={login}/>
       <header className="text-center text-white bg-primary masthead">
         <h1 style={{ fontSize: "3rem" }}>Welcome</h1>
       </header>

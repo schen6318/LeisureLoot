@@ -169,6 +169,7 @@ function myDB() {
     myDB.getComments(req, res).catch(console.dir);
   };
 
+  //the list of posts
   myDB.getComments = async (req, res) => {
     console.log("Reload comment has been executed.");
     let query2;
@@ -179,23 +180,13 @@ function myDB() {
     }
     const helpSeeker_db = project_database.collection("posts");
     const result1 = await helpSeeker_db.find(query2).toArray();
-    const helpOffer_db = project_database.collection("helper");
-    const result2 = await helpOffer_db.find(query2).toArray();
-    let result = await result1.concat(result2);
-    res.send(result);
-    return result;
+    // const helpOffer_db = project_database.collection("helper");
+    // const result2 = await helpOffer_db.find(query2).toArray();
+    // let result = await result1.concat(result2);
+    res.send(result1);
+    return result1;
   };
 
-  //get all the offer help posts in the database.
-  // myDB.getAllHelpOfferPosts = async (bol, res) => {
-  //   // console.log("Loading all posts from database.");
-  //   // console.log(bol);
-  //   const post_db = project_database.collection("helper");
-  //   let result = await post_db.find({}).sort({ "Ideal Price": bol }).toArray();
-  //   res.json(result);
-  //   // console.log("loaded");
-  //   return result;
-  // };
 
   //get all the seek help posts in the database.
   myDB.getAllSeekPosts = async (bol, res) => {
@@ -257,6 +248,26 @@ function myDB() {
       throw e;
     }
   };
+
+  //Sophia: get user points
+myDB.getPoints = async (userId) => {
+  const collection = project_database.collection("userProfile");
+  const idString = userId.$oid;
+  try {    
+    const result = await collection.findOne({ _id: new ObjectId(userId) });
+    if (result) {
+      
+      // return result;
+      return { points: result.points };
+      
+    } else {
+      return { error: "Points not found" };
+    }
+  } catch (e) {
+    console.error("Error getting user points from DB:", e);
+    throw e;
+  }
+};
 
   return myDB;
 }

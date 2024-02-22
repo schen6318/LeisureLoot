@@ -38,7 +38,7 @@ function AddPoints({ show, handleClose, userId }) {
         type: "resetOptions",
         value: {
           "client-id":
-            "CLIENT_ID",
+            "Ad9FeB4Sa6bI-uP6YXN1nmC7wHjJn7DKm640VvnTclAp-qt-8J42TwFIt7m9yOQqj5nx4bxj1Ja6CH9G",
           currency: "CAD",
           intent: "capture",
         },

@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 import AddressAutoComplete from "./autocomplete";
+import { useUser } from "../contexts/UserContext";
+
 
 function SubmitForm() {
   let [Subject, setSubject] = useState("");
   let [Category, setCategory] = useState("Select Category");
+  let [points, setPoints] = useState("");
   let [Price, setPrice] = useState("");
   let [Date, setDate] = useState("");
   let [Zipcode, setZipcode] = useState("");
@@ -16,6 +19,7 @@ function SubmitForm() {
   let [Errora, setError] = useState("");
   // Add a new state variable for status
   let [Status, setStatus] = useState("Open");
+  const { user } = useUser();
 
   const categoryOptions = [
     "Select Category",
@@ -32,6 +36,37 @@ function SubmitForm() {
   let subjectChange = (event) => {
     setSubject(event.target.value);
   };
+
+
+  // 
+  useEffect(() => {
+    async function fetchPoints() {
+      try {
+        console.log('Fetching points...');
+        console.log(user);
+        const response = await fetch(`/api/check-points/${user.id}`);
+        console.log('Response:', response);
+        if (!response.ok) {
+          console.error('Fetch failed:', response.statusText);
+          return;
+        }
+        const data = await response.json();
+        console.log('Data:', data);
+        if (data.error) {
+          console.error('Error fetching points:', data.error);
+        } else {
+          setPoints(data.points);
+          console.log('Points:', data.points);
+        }
+      } catch (error) {
+        console.error('Error fetching points:', error);
+      }
+    }
+    fetchPoints();
+  }, []);
+
+  
+
   let priceChange = (event) => {
     setPrice(event.target.value);
   };
@@ -39,10 +74,8 @@ function SubmitForm() {
     setDate(event.target.value);
   };
 
-
   //when the user hit the submit button of the form
   const handleSubmit = async () => {
-    //type checker to ensure numbers are numbers, strings are strings etc.
     if (Category === "Select Category" || isNaN(parseInt(Price))) {
       if (Category === "Select Category" && isNaN(parseInt(Price))) {
         setError("Please select a category and input a valid price.");
@@ -51,7 +84,10 @@ function SubmitForm() {
       } else if (isNaN(parseInt(Price))) {
         setError("Price given is invalid. Please try again.");
       }
-    } else {
+      
+    }else if(parseInt(Price)>parseInt(points)) {
+      setError("You don't have enough points to post this task, please go to profile to deposit more points.");
+    }else {
       try {
         await fetch("/api/submit-form", {
           method: "POST",
@@ -147,6 +183,24 @@ function SubmitForm() {
             <div className="row">
               <div className="col-md-12">
                 <div className="md-form mb-0">
+                  
+                  <label htmlFor="points">Points balance  </label>
+                  <input
+                    type="text"
+                    id="points"
+                    value={points}
+                    readOnly
+                    width="60px"
+                  />
+                  <br />
+                </div>
+              </div>
+            </div>
+
+
+            <div className="row">
+              <div className="col-md-12">
+                <div className="md-form mb-0">
                   <label htmlFor="price">Price (CAD per hour/item/job)</label>
                   <input
                     type="text"
@@ -178,17 +232,17 @@ function SubmitForm() {
               </div>
             </div>
 
-            <AddressAutoComplete
+            {/* <AddressAutoComplete
               initialaddress={Address}
               setaddress={setAddress}
               setlatitude={setLatitude}
               setlongitude={setLongitude}
               setGeoState={setState}
               setZip={setZipcode}
-            />
+            /> */}
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleSubmit}>
+            <Button variant="secondary" htmlFor="subject" onClick={handleSubmit}>
               Submit
             </Button>
           </Modal.Footer>

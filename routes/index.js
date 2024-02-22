@@ -106,6 +106,23 @@ router.post("/submit-form", async (req, res) => {
   await myDB.insert_post(req, res).catch(console.dir);
 });
 
+router.get("/check-points/:userId", async (req, res) => {
+  console.log("check points!");
+  try {
+  const userId = req.params.userId;
+  const result = await myDB.getPoints(userId, res);
+  if (result) {
+    // console.log(result);
+    res.json(result);
+  } else {
+    res.status(404).send({ message: "Points not found" });
+  }
+} catch (error) {
+  console.error("Error fetching points:", error);
+  res.status(500).send({ message: "Internal server error" });
+}
+});
+
 router.get("/load-user-posts", async (req, res) => {
   // console.log("Loading logged in user's posts...");
   await myDB.getComments(req, res).catch(console.dir);

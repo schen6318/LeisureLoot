@@ -22,6 +22,7 @@ function Profile() {
     description: "",
     points: 0, //initialize points
   });
+  let [login] = useState(false);
 
   const [showAddPoints, setShowAddPoints] = useState(false);
 
@@ -109,7 +110,7 @@ function Profile() {
 
   return (
     <>
-      <Navbar />
+      <Navbar login={login}/>
       <header className="text-center text-white bg-primary masthead">
         <h1 style={{ fontSize: "3rem" }}>My Profile</h1>
       </header>

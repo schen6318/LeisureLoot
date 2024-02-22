@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 import AddressAutoComplete from "./autocomplete";
 import PropTypes from "prop-types";
+import { useUser } from "../contexts/UserContext";
 // import Categories from "../Other Components/Categories";
 function ModifyPost(props) {
   let [Subject, setSubject] = useState(props.information.Description);
@@ -14,6 +15,8 @@ function ModifyPost(props) {
   let [GeoState, setGeoState] = useState(props.information["State"]);
   let [Longitude, setLongitude] = useState(props.information.Longitude);
   let [Error, setError] = useState("");
+  let [points, setPoints] = useState(props.Points);
+  const { user } = useUser();
   
   const Mode = props.information.Mode;
   const id = props.information._id;
@@ -41,10 +44,36 @@ function ModifyPost(props) {
   let categoryChange = (event) => {
     setCategory(event.target.value);
   };
+
+  useEffect(() => {
+    async function fetchPoints() {
+      try {
+        console.log('Fetching points...');
+        console.log(user);
+        const response = await fetch(`/api/check-points/${user.id}`);
+        console.log('Response:', response);
+        if (!response.ok) {
+          console.error('Fetch failed:', response.statusText);
+          return;
+        }
+        const data = await response.json();
+        console.log('Data:', data);
+        if (data.error) {
+          console.error('Error fetching points:', data.error);
+        } else {
+          setPoints(data.points);
+          console.log('Points:', data.points);
+        }
+      } catch (error) {
+        console.error('Error fetching points:', error);
+      }
+    }
+    fetchPoints();
+  }, []);
+
   //when the user hit the submit button of the form
   const handleEdit = async () => {
-    //we also need to add a type checker to ensure numbers are numbers, strings are strings etc.
-    //we also need to add a type checker to ensure numbers are numbers, strings are strings etc.
+    //we also need to add a type checker to ensure numbers are numbers, strings are strings etc. 
     if (Category === "Select Category" || isNaN(parseInt(Price))) {
       if (Category === "Select Category" && isNaN(parseInt(Price))) {
         setError("Please select a category and input a valid price.");
@@ -53,7 +82,9 @@ function ModifyPost(props) {
       } else if (isNaN(parseInt(Price))) {
         setError("Price given is invalid. Please try again.");
       }
-    } else {
+      }else if(parseInt(Price)>parseInt(points)) {
+        setError("You don't have enough points to post this task, please go to profile to deposit more points.");
+      }else {
       await fetch("/api/edit-post", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -162,6 +193,22 @@ function ModifyPost(props) {
                 </div>
               </div>
             </div>
+            
+            <div className="row">
+              <div className="col-md-12">
+                <div className="md-form mb-0">     
+                  <label htmlFor="points">Points balance</label>
+                  <input
+                    type="text"
+                    id="points"
+                    value={points}
+                    readOnly
+                    
+                  />
+                  <br />
+                </div>
+              </div>
+            </div>
 
             <div className="row">
               <div className="col-md-12">
@@ -199,14 +246,14 @@ function ModifyPost(props) {
               </div>
             </div>
 
-            <AddressAutoComplete
+            {/* <AddressAutoComplete
               initialaddress={Address}
               setaddress={setAddress}
               setlatitude={setLatitude}
               setlongitude={setLongitude}
               setGeoState={setGeoState}
               setZip={setZipcode}
-            />
+            /> */}
           </Modal.Body>
           <Modal.Footer>
             <Button variant="primary" onClick={handleEdit}>
