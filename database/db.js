@@ -143,7 +143,7 @@ function myDB() {
         Latitude: json.Latitude,
       },
     };
-    const query = { _id: ObjectId(json._id) };
+    const query = { _id: new ObjectId(json._id) };
     await target_database.updateOne(query, edit);
     console.log("Comment successfully edited!");
     //Attempt to reload comments.
@@ -163,7 +163,7 @@ function myDB() {
         Status: json.Status,
       },
     };
-    const query = { _id: ObjectId(json._id) };
+    const query = { _id: new ObjectId(json._id) };
     await target_database.updateOne(query, update);
     console.log("Post status successfully updated!");
     res.json({ status: true });
@@ -178,7 +178,7 @@ function myDB() {
       target_database = project_database.collection("helper");
     }
 
-    const query = { _id: ObjectId(json._id) };
+    const query = { _id: new ObjectId(json._id) };
     await target_database.deleteOne(query);
     console.log("Entry successfully deleted!");
     //Attempt to reload comments.
@@ -207,19 +207,19 @@ function myDB() {
     if (req.user === "admin@admin") {
       query1 = {};
     } else {
-      query1 = { senderUsername: req.user };
+      query1 = { senderUsername: req.user.username };
     }
     const message_db = project_database.collection("message");
     const messagefilter_db = await message_db.find(query1).toArray();
-    // Get an array of postid values
+    console.log(messagefilter_db);
     const postidArray = messagefilter_db.map(doc => doc.postid);
-    // Remove duplicates
+    console.log(postidArray);
     const uniquePostidArray = [...new Set(postidArray)];
 
-    const objectIdArray = uniquePostidArray.map(id => ObjectId(id));
+    const objectIdArray = uniquePostidArray.map(id => new ObjectId(id));
 
     const post_db = project_database.collection("posts");
-    const posts = await post_db.find({ username: { $ne: req.user }, _id : { $in: objectIdArray } }).toArray();
+    const posts = await post_db.find({ username: { $ne: req.user.username }, _id: { $in: objectIdArray } }).toArray();
 
     res.send(posts);
     return posts;
@@ -254,9 +254,25 @@ function myDB() {
     res
   ) => {
     const messagedb = project_database.collection("message");
+    let senderUser;
+    if (
+      typeof senderUsername === "object" &&
+      senderUsername !== null &&
+      senderUsername.username
+    ) {
+      senderUser = senderUsername.username;
+    } else if (typeof senderUsername === "string") {
+      senderUser = senderUsername;
+    } else {
+      console.error("Invalid senderUsername format");
+      res
+        .status(400)
+        .json({ status: "error", message: "Invalid senderUsername format" });
+      return;
+    }
     const write_info = {
       postid: postid,
-      senderUsername: senderUsername,
+      senderUsername: senderUser,
       receiverUsername: receiverUsername,
       message: message,
     };
@@ -272,12 +288,12 @@ function myDB() {
   };
 
   myDB.retrieveReceivedOtherMessage = async (req, res) => {
-    //const filter = {senderUsername: req.user };
+    const filter = {senderUsername: req.user };
     const messagedb = project_database.collection("message");
     const result = await messagedb.find({}).toArray();
     res.json(result);
   };
-  
+
   //iteration2-sissy: add points
   myDB.addPoints = async (userId, pointsToAdd) => {
     const collection = project_database.collection("userProfile");

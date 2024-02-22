@@ -165,7 +165,7 @@ function OfferHelpPage() {
       console.log("Login Status is:", loginStatus.user);
       if (loginStatus.user !== undefined) {
         setLogin(true);
-        setLoginUsername(loginStatus.user);
+        setLoginUsername(loginStatus.user.username);
       } else {
         setLogin(false);
         setLoginUsername("");

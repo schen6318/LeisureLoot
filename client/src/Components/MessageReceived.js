@@ -17,7 +17,7 @@ function MessageReceived(props) {
       fetch("/api/get-received-message")
         .then((res) => res.json())
         .then((post) => {
-          // console.log("Got message", post);
+          console.log("Got message", post);
           setMessage(post.filter((item) => item.postid === props.postid));
         });
     }
@@ -55,9 +55,7 @@ function MessageReceived(props) {
                   <th scope="col">#</th>
                   <th scope="col">From</th>
                   <th scope="col">Message</th>
-                  <th scope="col" colSpan="3">
-                    Action
-                  </th>
+                  <th scope="col" colSpan="3">Action</th>
                 </tr>
               </thead>
               <tbody id="message_content">

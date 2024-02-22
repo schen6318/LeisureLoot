@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ModifyPost from "./modify_post.js";
-import SubmitForm from "./submitform";
-import MessageReceived from "./MessageReceived";
+import SubmitForm from "./submitform.js";
+import MessageReceived from "./MessageReceived.js";
 import MessageReceivedOthers from "./MessageReceivedOthers.js";
 import Navbar from "./Navbar.js";
 import Footer from "./Footer.js";
@@ -10,7 +10,7 @@ function PostForm2() {
   //all posts that belongs to this user.
   const [Post, setPosts] = useState([]);
   let [login, setLogin] = useState(false);
-  const [OtherPost, setOtherPosts] = useState([]);
+  const [otherPost, setOtherPosts] = useState([]);
   const [loginUsername, setLoginUsername] = useState("");
 
   useEffect(() => {
@@ -90,6 +90,7 @@ function PostForm2() {
       let loginStatus = await status.json();
       if (loginStatus.user !== undefined) {
         setLogin(true);
+        setLoginUsername(loginStatus.user);
         fetch("/api/load-other-posts")
           .then((res) => res.json())
           .then((post) => {
@@ -102,7 +103,7 @@ function PostForm2() {
   }, []);
 
   function LoadOtherPost() {
-    if (OtherPost.length === 0) {
+    if (otherPost.length === 0) {
       return (
         <p style={{ fontSize: "30px" }}>
           No post is available for this account😅 Please submit a post first.
@@ -128,7 +129,7 @@ function PostForm2() {
             </tr>
           </thead>
           <tbody id="post_content">
-            {OtherPost.map((p, i) => (
+            {otherPost.map((p, i) => (
               <tr key={i}>
                 <th>{i + 1}</th>
                 <td>{p.username}</td>

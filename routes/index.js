@@ -112,7 +112,7 @@ router.get("/load-user-posts", async (req, res) => {
 });
 
 router.get("/load-other-posts", async (req, res) => {
-  // console.log("Loading other's posts...");
+  //console.log("Loading other's posts...");
   await myDB.getCommentsOthers(req, res).catch(console.dir);
 });
 
