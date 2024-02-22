@@ -51,14 +51,14 @@ function CommentBox(props) {
 
   return (
     <>
-      <Button
-        className={"sendmessagebutton"}
-        variant="primary"
-        onClick={handleShow}
-        disabled={!usable}
-      >
-        {buttonText}
-      </Button>
+        <Button
+          className={"sendmessagebutton"}
+          variant="primary"
+          onClick={handleShow}
+          disabled={!usable}
+        >
+          {buttonText}
+        </Button>
 
       <Modal
         show={show}

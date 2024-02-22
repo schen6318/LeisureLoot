@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 
 function CommentBox(props) {
   let postid = props.json.postid;
-  let user = JSON.parse(localStorage.getItem("user"));  
   let [message, setmessage] = useState("");
   const [show, setShow] = useState(false);
   let [usable, setUsable] = useState(false);
@@ -43,9 +42,8 @@ function CommentBox(props) {
         postid: postid,
       }),
     });
-
     setShow(false);
-    //window.location.reload(true);
+    window.location.reload(true);
   };
 
   useEffect(() => {
@@ -61,14 +59,14 @@ function CommentBox(props) {
 
   return (
     <>
-      <Button
-        className={"sendmessagebutton"}
-        variant="primary"
-        onClick={handleShow}
-        disabled={!usable}
-      >
-        {buttonText}
-      </Button>
+        <Button
+          className={"sendmessagebutton"}
+          variant="primary"
+          onClick={handleShow}
+          disabled={!usable}
+        >
+          {buttonText}
+        </Button>
 
       <Modal
         show={show}
