@@ -55,6 +55,7 @@ function CommentBox(props) {
         variant="primary"
         onClick={handleShow}
         disabled={!usable}
+        style={{ padding: "2px" }}
       >
         {buttonText}
       </Button>

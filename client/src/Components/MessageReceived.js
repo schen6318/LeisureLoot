@@ -38,7 +38,6 @@ function MessageReceived(props) {
         <Button variant="primary" onClick={handleShow}>
           Comments ({message.length})
         </Button>
-
         <Modal
           show={show}
           id={"moreDetailModal"}
@@ -49,7 +48,7 @@ function MessageReceived(props) {
             <Modal.Title>Details</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <table className="table">
+            <table className="table" style={{ width: "540px" }}>
               <thead>
                 <tr>
                   <th scope="col">#</th>
@@ -66,34 +65,47 @@ function MessageReceived(props) {
                     <th>{i + 1}</th>
                     <td
                       style={{
-                        maxWidth: "100px",
-                        wordWrap: "break-word",
+                        maxWidth: "120px",
+                        wordBreak: "break-all",
                         overflowWrap: "break-word",
                       }}
                     >
                       {p.senderUsername}
                     </td>
-                    <td>{p.message}</td>
-                    <td>
-                      <ReplyBox
-                        json={p}
-                        loginStatus={props.loginStatus}
-                        loginUsername={props.loginUsername}
-                      />
+                    <td
+                      style={{
+                        maxWidth: "180px",
+                        wordBreak: "break-all",
+                        overflowWrap: "break-word",
+                      }}
+                    >
+                      {p.message}
                     </td>
                     <td>
-                      <ApproveBox
-                        json={p}
-                        loginStatus={props.loginStatus}
-                        loginUsername={props.loginUsername}
-                      />
-                    </td>
-                    <td>
-                      <RejectBox
-                        json={p}
-                        loginStatus={props.loginStatus}
-                        loginUsername={props.loginUsername}
-                      />
+                      <div
+                        style={{
+                          display: "flex",
+                          flexWrap: "wrap",
+                          gap: "5px",
+                          maxWidth: "180px",
+                        }}
+                      >
+                        <ReplyBox
+                          json={p}
+                          loginStatus={props.loginStatus}
+                          loginUsername={props.loginUsername}
+                        />
+                        <ApproveBox
+                          json={p}
+                          loginStatus={props.loginStatus}
+                          loginUsername={props.loginUsername}
+                        />
+                        <RejectBox
+                          json={p}
+                          loginStatus={props.loginStatus}
+                          loginUsername={props.loginUsername}
+                        />
+                      </div>
                     </td>
                   </tr>
                 ))}
