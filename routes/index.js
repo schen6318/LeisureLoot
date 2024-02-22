@@ -175,4 +175,10 @@ router.post("/update-points", async (req, res) => {
   }
 });
 
+//iteration2-bob: transfer points
+router.post("/transfer-points", async (req, res) => {
+  // console.log("Transfer points request submitted!");
+  await myDB.transfer_points(req, res).catch(console.dir);
+});
+
 module.exports = router;

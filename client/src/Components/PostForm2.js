@@ -125,7 +125,6 @@ function PostForm2() {
               <th scope="col">Post Type</th>
               <th scope="col">Post Status</th>
               <th scope="col">Comments</th>
-              <th scope="col">Action</th>
             </tr>
           </thead>
           <tbody id="post_content">
@@ -143,9 +142,6 @@ function PostForm2() {
                 <td>{p.Status}</td>
                 <td>
                   <MessageReceivedOthers postid={p._id} loginStatus={login} loginUsername={loginUsername}/>
-                </td>
-                <td>
-                  <ModifyPost information={p} />
                 </td>
               </tr>
             ))}

@@ -3,7 +3,7 @@ import { Button, Modal } from "react-bootstrap";
 import PropTypes from "prop-types";
 
 function CommentBox(props) {
-  let postid = props.json.postid;
+  let postid = props.json._id;
   let [message, setmessage] = useState("");
   const [show, setShow] = useState(false);
   let [usable, setUsable] = useState(false);
@@ -17,24 +17,35 @@ function CommentBox(props) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        postid: postid,
+        postid: props.json.postid,
         senderUsername: props.loginUsername,
         receiverUsername: props.json.senderUsername,
         message: message,
       }),
     });
-
+    console.log(props.loginUsername, props.json.postid);
+    // Update the status of the post
+    await fetch("/api/update-post-status", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        _id: props.json.postid,
+        Mode: "SeekHelp",
+        Status: "Finished",
+      }),
+    });
     setShow(false);
-    //window.location.reload(true);
+    window.location.reload(true);
   };
 
   useEffect(() => {
     if (props.loginStatus) {
       setUsable(true);
-      setButtonText("Reply");
+      setButtonText("Finish Order");
+      setmessage('I have finished the job. Please confirm!');
     } else {
       setUsable(false);
-      setButtonText("Login to Reply Message");
+      setButtonText("Login to Send Message");
     }
   }, [props.loginStatus]);
 
@@ -56,7 +67,7 @@ function CommentBox(props) {
         aria-labelledby="messageModal"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Reply a message!</Modal.Title>
+          <Modal.Title>Finish Order!</Modal.Title>
         </Modal.Header>
 
         <Modal.Body>
@@ -65,10 +76,9 @@ function CommentBox(props) {
             type="text"
             id="subject"
             name="subject"
-            value={message}
-            onChange={(event) => setmessage(event.target.value)}
+            defaultValue={message}
+            readOnly
             className="form-control"
-            placeholder={"Message"}
           />
         </Modal.Body>
         <Modal.Footer>

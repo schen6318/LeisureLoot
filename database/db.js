@@ -83,7 +83,6 @@ function myDB() {
         return null;
       }
       profile = { id: profile._id.toString(), ...profile, _id: undefined };
-      console.log(profile);
       return profile;
     } catch (e) {
       console.error("Error fetching user profile:", e);
@@ -211,9 +210,7 @@ function myDB() {
     }
     const message_db = project_database.collection("message");
     const messagefilter_db = await message_db.find(query1).toArray();
-    console.log(messagefilter_db);
     const postidArray = messagefilter_db.map(doc => doc.postid);
-    console.log(postidArray);
     const uniquePostidArray = [...new Set(postidArray)];
 
     const objectIdArray = uniquePostidArray.map(id => new ObjectId(id));
@@ -288,9 +285,10 @@ function myDB() {
   };
 
   myDB.retrieveReceivedOtherMessage = async (req, res) => {
-    const filter = {senderUsername: req.user };
+    const filter = { $or: [{ senderUsername: req.user.username }, { receiverUsername: req.user.username }] };
     const messagedb = project_database.collection("message");
-    const result = await messagedb.find({}).toArray();
+    const result = await messagedb.find(filter).toArray();
+    console.log(result);
     res.json(result);
   };
 
@@ -319,6 +317,39 @@ function myDB() {
       throw e;
     }
   };
+
+  //iteration2-bob: after confirmation, transfer points to offer-help user 
+  myDB.transfer_points = async (req, res) => {
+    let target_database1;
+    let target_database2;
+    let target_database3;
+    let json = req.body;
+
+    target_database1 = project_database.collection("posts");
+    target_database2 = project_database.collection("userInfo");
+    target_database3 = project_database.collection("userProfile");
+
+    const query1 = { _id: new ObjectId(json.postid) };
+    const post = await target_database1.findOne(query1);
+    const points = post["Ideal Price"];
+
+    const query2 = { username: json.username }; 
+    const targetUser = await target_database2.findOne(query2);
+
+    const query3 = { _id: new ObjectId(targetUser._id)};
+    const targetUserProfile = await target_database3.findOne(query3);
+    
+    const newPoints = targetUserProfile.points + points;
+    const update = {
+      $set: {
+        points: newPoints,
+      },
+    };
+    await target_database3.updateOne(query3, update);
+    console.log("Points successfully transferred!");
+    res.json({ status: true });
+  };
+
 
   return myDB;
 }

@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(
   session({
     secret: "secret",
-    resave: true,
+    resave: false,
     saveUninitialized: true,
   })
 );
@@ -27,9 +27,14 @@ app.get("/loginStatus", (req, res) => {
 });
 
 app.get("/logout", function (req, res) {
-  req.logout();
-  console.log("Current log in user is", req.user);
-  res.json({ status: true });
+  req.logout(function (err) {
+    if (err) {
+      console.log(err);
+      return next(err);
+    }
+    console.log("User has been logged out.");
+    res.json({ status: true, message: "Logged out successfully" });
+  });
 });
 
 app.use("/api", routes);

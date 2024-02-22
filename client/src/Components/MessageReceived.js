@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import ReplyBox from "./ReplyBox.js";
 import ApproveBox from "./ApproveBox.js";
 import RejectBox from "./RejectBox.js";
+import ConfirmBox from "./ConfirmBox.js";
 
 function MessageReceived(props) {
   let [message, setMessage] = useState([]);
@@ -80,18 +81,34 @@ function MessageReceived(props) {
                       />
                     </td>
                     <td>
+                      {
+                        p.message === "I would like to take order!" &&
                       <ApproveBox
                         json={p}
                         loginStatus={props.loginStatus}
                         loginUsername={props.loginUsername}
                       />
+                      }
                     </td>
                     <td>
+                      {
+                        p.message === "I would like to take order!" &&
                       <RejectBox
                         json={p}
                         loginStatus={props.loginStatus}
                         loginUsername={props.loginUsername}
                       />
+                      }
+                    </td>
+                    <td>
+                      {
+                        p.message === "I have finished the job. Please confirm!" &&
+                      <ConfirmBox
+                        json={p}
+                        loginStatus={props.loginStatus}
+                        loginUsername={props.loginUsername}
+                      />
+                      }
                     </td>
                   </tr>
                 ))}

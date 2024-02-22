@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 import PropTypes from "prop-types";
 import ReplyBox from "./ReplyBox.js";
+import FinishOrderBox from "./FinishOrderBox.js";
 
 function MessageReceivedOthers(props) {
   let [message, setMessage] = useState([]);
@@ -52,6 +53,7 @@ function MessageReceivedOthers(props) {
                 <tr>
                   <th scope="col">#</th>
                   <th scope="col">From</th>
+                  <th scope="col">To</th>
                   <th scope="col">Message</th>
                   <th scope="col" colSpan="3">Action</th>
                 </tr>
@@ -63,11 +65,22 @@ function MessageReceivedOthers(props) {
                   <tr key={i}>
                     <th>{i + 1}</th>
                     <td>{p.senderUsername}</td>
+                    <td>{p.receiverUsername}</td>
                     <td>{p.message}</td>
                     <td>
                     {
                       p.senderUsername !== props.loginUsername && 
                     <ReplyBox
+                      json={p}
+                      loginStatus={props.loginStatus}
+                      loginUsername={props.loginUsername}
+                    />
+                    }
+                    </td>
+                    <td>
+                    {
+                      p.message === "Your order has been approved!" && 
+                    <FinishOrderBox
                       json={p}
                       loginStatus={props.loginStatus}
                       loginUsername={props.loginUsername}
