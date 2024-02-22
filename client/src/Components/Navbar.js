@@ -29,13 +29,13 @@ function Navbar({ login }) {
     >
       <div className="container">
         <img src={logo} alt="Leisure Loot Logo" style={{ width: "100px" }} />
-        <a
+        <Link
           className="navbar-brand"
-          href="/"
+          to="/"
           style={{ position: "relative", marginLeft: "30px" }}
         >
           Leisure Loot
-        </a>
+        </Link>
         <button
           data-bs-toggle="collapse"
           data-bs-target="#navbarResponsive"
