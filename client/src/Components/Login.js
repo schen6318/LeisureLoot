@@ -43,7 +43,8 @@ function Login() {
       if (result.status === false) {
         setCurrentStatus("Incorrect username/password! Please try again!");
       } else if (result.status === true && result.user && result.user.id) {
-        setGlobalUser({ username: result.user.username, id: result.user.id });
+        setGlobalUser(result.user);
+        localStorage.setItem("user", JSON.stringify(result.user));
         setShowModal(true);
       } else {
         console.error("Unexpected response structure:", result);
