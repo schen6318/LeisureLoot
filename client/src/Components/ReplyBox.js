@@ -26,7 +26,7 @@ function CommentBox(props) {
     console.log(props.loginUsername);
 
     setShow(false);
-    window.location.reload(true);
+    //window.location.reload(true);
   };
 
   useEffect(() => {

@@ -62,11 +62,11 @@ function MessageReceivedOthers(props) {
                   return(
                   <tr key={i}>
                     <th>{i + 1}</th>
-                    <td>{p.senderUsername.username}</td>
+                    <td>{p.senderUsername}</td>
                     <td>{p.message}</td>
                     <td>
                     {
-                      p.senderUsername.username !== props.loginUsername && 
+                      p.senderUsername !== props.loginUsername && 
                     <ReplyBox
                       json={p}
                       loginStatus={props.loginStatus}

@@ -19,7 +19,7 @@ function PostForm2() {
       let loginStatus = await status.json();
       if (loginStatus.user !== undefined) {
         setLogin(true);
-        setLoginUsername(loginStatus.user);
+        setLoginUsername(loginStatus.user.username);
         fetch("/api/load-user-posts")
           .then((res) => res.json())
           .then((post) => {
@@ -90,7 +90,7 @@ function PostForm2() {
       let loginStatus = await status.json();
       if (loginStatus.user !== undefined) {
         setLogin(true);
-        setLoginUsername(loginStatus.user);
+        setLoginUsername(loginStatus.user.username);
         fetch("/api/load-other-posts")
           .then((res) => res.json())
           .then((post) => {
