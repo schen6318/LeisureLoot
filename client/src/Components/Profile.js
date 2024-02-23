@@ -353,9 +353,16 @@ function Profile() {
                             onChange={handleChange}
                           >
                             <option value="">Please Select</option>
-                            <option value="Craft">Craft</option>
-                            <option value="Cake">Cake</option>
-                            <option value="IT">IT</option>
+                            <option value="Chore">Chore</option>
+                            <option value="Academic">Academic</option>
+                            <option value="Cleaning">Cleaning</option>
+                            <option value="House Handy Work">
+                              House Handy Work
+                            </option>
+                            <option value="Baby Sitting">Baby Sitting</option>
+                            <option value="Moving">Moving</option>
+                            <option value="PetCare">Pet Care</option>
+                            <option value="Shopping">Shopping</option>
                           </select>
                         </div>
                         <div className="form-group">

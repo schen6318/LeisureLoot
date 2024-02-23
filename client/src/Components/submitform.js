@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Modal } from "react-bootstrap";
 import AddressAutoComplete from "./autocomplete";
+import { useUser } from "../contexts/UserContext";
 
 function SubmitForm() {
   let [Subject, setSubject] = useState("");
   let [Category, setCategory] = useState("Select Category");
+  let [points, setPoints] = useState("");
   let [Price, setPrice] = useState("");
   let [Date, setDate] = useState("");
   let [Zipcode, setZipcode] = useState("");
@@ -12,11 +14,11 @@ function SubmitForm() {
   let [Latitude, setLatitude] = useState(0);
   let [State, setState] = useState("");
   let [Longitude, setLongitude] = useState(0);
-  let [Mode, setMode] = useState("OfferHelp");
   let [show, setShow] = useState(false);
   let [Errora, setError] = useState("");
   // Add a new state variable for status
   let [Status, setStatus] = useState("Open");
+  const { user } = useUser();
 
   const categoryOptions = [
     "Select Category",
@@ -33,19 +35,43 @@ function SubmitForm() {
   let subjectChange = (event) => {
     setSubject(event.target.value);
   };
+
+  //
+  useEffect(() => {
+    async function fetchPoints() {
+      try {
+        console.log("Fetching points...");
+        console.log(user);
+        const response = await fetch(`/api/check-points/${user.id}`);
+        console.log("Response:", response);
+        if (!response.ok) {
+          console.error("Fetch failed:", response.statusText);
+          return;
+        }
+        const data = await response.json();
+        console.log("Data:", data);
+        if (data.error) {
+          console.error("Error fetching points:", data.error);
+        } else {
+          setPoints(data.points);
+          console.log("Points:", data.points);
+        }
+      } catch (error) {
+        console.error("Error fetching points:", error);
+      }
+    }
+    fetchPoints();
+  }, []);
+
   let priceChange = (event) => {
     setPrice(event.target.value);
   };
   let dateChange = (event) => {
     setDate(event.target.value);
   };
-  let modeChange = (event) => {
-    setMode(event.target.value);
-  };
 
   //when the user hit the submit button of the form
   const handleSubmit = async () => {
-    //type checker to ensure numbers are numbers, strings are strings etc.
     if (Category === "Select Category" || isNaN(parseInt(Price))) {
       if (Category === "Select Category" && isNaN(parseInt(Price))) {
         setError("Please select a category and input a valid price.");
@@ -54,13 +80,28 @@ function SubmitForm() {
       } else if (isNaN(parseInt(Price))) {
         setError("Price given is invalid. Please try again.");
       }
+    } else if (parseInt(Price) > parseInt(points)) {
+      setError(
+        "You don't have enough points to post this task, please go to profile to deposit more points."
+      );
     } else {
+      const pointsToDeduct = parseInt(Price);
+      // console.log(user);
       try {
+        await fetch(`/api/deductPoints`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: user.id,
+            pointsToDeduct: pointsToDeduct,
+          }),
+        });
+
         await fetch("/api/submit-form", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            Mode: Mode,
+            Mode: "SeekHelp",
             Description: Subject,
             Category: Category,
             "Ideal Price": parseInt(Price),
@@ -104,30 +145,10 @@ function SubmitForm() {
             <div className="row">
               <div className="col-md-12">
                 <div className="md-form">
-                  <p>{Errora}</p>
-                  <div className="md-form mb-0">
-                    I am posting to...
-                    <select
-                      className={"ml-2 category"}
-                      aria-label="categorySelect"
-                      value={Mode}
-                      onChange={modeChange}
-                    >
-                      <option
-                        key="offer"
-                        value="OfferHelp"
-                        onChange={modeChange}
-                      >
-                        Offer Help
-                      </option>
-                      <option key="seek" value="SeekHelp" onChange={modeChange}>
-                        Seek Help
-                      </option>
-                    </select>
-                  </div>
+                  <p>{Error}</p>
+                  <div className="md-form mb-0">I am posting to seek help</div>
                 </div>
 
-                {/*<div className="row mt-2 mb-2">*/}
                 <select
                   className="category my-3"
                   aria-label="category"
@@ -142,7 +163,6 @@ function SubmitForm() {
                     </option>
                   ))}
                 </select>
-                {/*</div>*/}
               </div>
             </div>
 
@@ -157,6 +177,22 @@ function SubmitForm() {
                     value={Subject}
                     onChange={subjectChange}
                     className="form-control"
+                  />
+                  <br />
+                </div>
+              </div>
+            </div>
+
+            <div className="row">
+              <div className="col-md-12">
+                <div className="md-form mb-0">
+                  <label htmlFor="points">Points balance </label>
+                  <input
+                    type="text"
+                    id="points"
+                    value={points}
+                    readOnly
+                    width="60px"
                   />
                   <br />
                 </div>
@@ -197,17 +233,21 @@ function SubmitForm() {
               </div>
             </div>
 
-            <AddressAutoComplete
+            {/* <AddressAutoComplete
               initialaddress={Address}
               setaddress={setAddress}
               setlatitude={setLatitude}
               setlongitude={setLongitude}
               setGeoState={setState}
               setZip={setZipcode}
-            />
+            /> */}
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleSubmit}>
+            <Button
+              variant="secondary"
+              htmlFor="subject"
+              onClick={handleSubmit}
+            >
               Submit
             </Button>
           </Modal.Footer>

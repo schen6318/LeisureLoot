@@ -106,6 +106,23 @@ router.post("/submit-form", async (req, res) => {
   await myDB.insert_post(req, res).catch(console.dir);
 });
 
+router.get("/check-points/:userId", async (req, res) => {
+  console.log("check points!");
+  try {
+    const userId = req.params.userId;
+    const result = await myDB.getPoints(userId, res);
+    if (result) {
+      // console.log(result);
+      res.json(result);
+    } else {
+      res.status(404).send({ message: "Points not found" });
+    }
+  } catch (error) {
+    console.error("Error fetching points:", error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+});
+
 router.get("/load-user-posts", async (req, res) => {
   // console.log("Loading logged in user's posts...");
   await myDB.getComments(req, res).catch(console.dir);
@@ -139,7 +156,7 @@ router.post("/submit-message", async (req, res) => {
 
 //must be changed 6
 router.get("/get-received-message", async (req, res) => {
-  console.log("getting received messages...");
+  // console.log("getting received messages...");
   await myDB.retrieveReceivedMessage(req, res);
 });
 
@@ -160,6 +177,27 @@ router.post("/update-points", async (req, res) => {
     }
   } catch (error) {
     console.error("Error updating user points:", error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+});
+
+router.post("/deductPoints", async (req, res) => {
+  try {
+    const { userId, pointsToDeduct } = req.body;
+    const result = await myDB.deductPoints(userId, pointsToDeduct);
+    console.log(result);
+    if (result) {
+      console.log("Deducted OK");
+      res.send({
+        points: result.points,
+      });
+    } else {
+      res.send({
+        message: "Points deducted failed",
+      });
+    }
+  } catch (error) {
+    console.error("Error deducting user points:", error);
     res.status(500).send({ message: "Internal server error" });
   }
 });

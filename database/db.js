@@ -290,6 +290,39 @@ function myDB() {
     }
   };
 
+  //Sophia: get user points
+  myDB.getPoints = async (userId) => {
+    const collection = project_database.collection("userProfile");
+    const idString = userId.$oid;
+    try {
+      const result = await collection.findOne({ _id: new ObjectId(userId) });
+      if (result) {
+        // return result;
+        return { points: result.points };
+      } else {
+        return { error: "Points not found" };
+      }
+    } catch (e) {
+      console.error("Error getting user points from DB:", e);
+      throw e;
+    }
+  };
+
+  myDB.deductPoints = async (userId, pointsToDeduct) => {
+    const collection = project_database.collection("userProfile");
+    try {
+      const result = await collection.findOneAndUpdate(
+        { _id: new ObjectId(userId) },
+        { $inc: { points: -pointsToDeduct } },
+        { returnOriginal: false }
+      );
+      // console.log(result);
+      return result;
+    } catch (e) {
+      console.error("Error deducting user points in DB", e);
+      throw e;
+    }
+  };
   return myDB;
 }
 
