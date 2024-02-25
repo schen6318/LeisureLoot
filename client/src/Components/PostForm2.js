@@ -43,7 +43,7 @@ function PostForm2() {
               <th scope="col">Username</th>
               <th scope="col">Category</th>
               <th scope="col">Description</th>
-              <th scope="col">Ideal Price</th>
+              <th scope="col">Price</th>
               <th scope="col">Date for task</th>
               <th scope="col">Zip Code</th>
               <th scope="col">Address</th>

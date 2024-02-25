@@ -16,7 +16,7 @@ function SubmitForm() {
   let [State, setState] = useState("");
   let [Longitude, setLongitude] = useState(0);
   let [show, setShow] = useState(false);
-  let [Errora, setError] = useState("");
+  let [Error, setError] = useState("");
   // Add a new state variable for status
   let [Status, setStatus] = useState("Open");
   const { user } = useUser();
@@ -38,13 +38,13 @@ function SubmitForm() {
   };
 
 
-  // 
+  //check points balance and location
   useEffect(() => {
-    async function fetchPoints() {
+    async function fetchPointsAndLocation() {
       try {
-        console.log('Fetching points...');
+        console.log('Fetching points and location...');
         console.log(user);
-        const response = await fetch(`/api/check-points/${user.id}`);
+        const response = await fetch(`/api/check-points-and-location/${user.id}`);
         console.log('Response:', response);
         if (!response.ok) {
           console.error('Fetch failed:', response.statusText);
@@ -57,12 +57,17 @@ function SubmitForm() {
         } else {
           setPoints(data.points);
           console.log('Points:', data.points);
+          console.log('City:', data.city);
+          console.log('street:', data.street);
+          console.log('zip:', data.zip);
+          setZipcode(data.zip);
+          setAddress(data.street+', '+ data.city);
         }
       } catch (error) {
         console.error('Error fetching points:', error);
       }
     }
-    fetchPoints();
+    fetchPointsAndLocation();
   }, []);
 
   
@@ -136,14 +141,7 @@ function SubmitForm() {
           <Modal.Body>
             <div className="row">
               <div className="col-md-12">
-                <div className="md-form">
-                  <p>{Errora}</p>
-                  <div className="md-form mb-0">
-                    I am posting to seek help
-                    
-                  </div>
-                </div>
-
+               
                 
                 <select
                   className="category my-3"
@@ -184,24 +182,18 @@ function SubmitForm() {
               <div className="col-md-12">
                 <div className="md-form mb-0">
                   
-                  <label htmlFor="points">Points balance  </label>
-                  <input
-                    type="text"
-                    id="points"
-                    value={points}
-                    readOnly
-                    width="60px"
-                  />
+                  <label htmlFor="points" style={{ marginRight: '10px' }}>Points balance:</label>
+                  <span id="points">{points}</span>
                   <br />
                 </div>
               </div>
             </div>
 
-
+            <br/>
             <div className="row">
               <div className="col-md-12">
                 <div className="md-form mb-0">
-                  <label htmlFor="price">Price (CAD per hour/item/job)</label>
+                  <label htmlFor="price">Price (points)</label>
                   <input
                     type="text"
                     id="price"
@@ -240,6 +232,17 @@ function SubmitForm() {
               setGeoState={setState}
               setZip={setZipcode}
             /> */}
+
+            <div className="row">
+              <div className="col-md-12">
+                <div className="md-form mb-0">     
+                  <label htmlFor="location" style={{ marginRight: '10px' }}>Location:</label>
+                  <span id="location">{Address} {Zipcode}</span>
+                  <br />
+                </div>
+              </div>
+            </div>
+            <p style={{color: "red"}}>{Error}</p>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" htmlFor="subject" onClick={handleSubmit}>

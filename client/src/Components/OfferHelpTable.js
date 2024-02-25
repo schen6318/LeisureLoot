@@ -26,8 +26,8 @@ function OfferHelpTable({ data, totalPosts, loginStatus, loginUsername }) {
         <tr>
           <th scope="Col" className="text-center">Category</th>
           <th scope="Col" className="text-center">Description</th>
-          <th scope="Col" className="text-center">Ideal Price</th>
-          <th scope="Col" className="text-center">State</th>
+          <th scope="Col" className="text-center">Price</th>
+          <th scope="Col" className="text-center">Post Status</th>
           <th scope="Col" className="text-center">Action</th>
         </tr>
       </thead>

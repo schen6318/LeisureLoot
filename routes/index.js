@@ -106,19 +106,19 @@ router.post("/submit-form", async (req, res) => {
   await myDB.insert_post(req, res).catch(console.dir);
 });
 
-router.get("/check-points/:userId", async (req, res) => {
-  console.log("check points!");
+router.get("/check-points-and-location/:userId", async (req, res) => {
+  console.log("check points and location!");
   try {
   const userId = req.params.userId;
-  const result = await myDB.getPoints(userId, res);
+  const result = await myDB.getPointsAndLocation(userId, res);
   if (result) {
     // console.log(result);
     res.json(result);
   } else {
-    res.status(404).send({ message: "Points not found" });
+    res.status(404).send({ message: "Points and location not found" });
   }
 } catch (error) {
-  console.error("Error fetching points:", error);
+  console.error("Error fetching points and location:", error);
   res.status(500).send({ message: "Internal server error" });
 }
 });

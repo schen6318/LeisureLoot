@@ -250,7 +250,7 @@ function myDB() {
   };
 
   //Sophia: get user points
-myDB.getPoints = async (userId) => {
+myDB.getPointsAndLocation = async (userId) => {
   const collection = project_database.collection("userProfile");
   const idString = userId.$oid;
   try {    
@@ -258,7 +258,12 @@ myDB.getPoints = async (userId) => {
     if (result) {
       
       // return result;
-      return { points: result.points };
+      return {
+        points: result.points,
+        city: result.city,
+        street: result.street,
+        zip: result.zip
+      };
       
     } else {
       return { error: "Points not found" };

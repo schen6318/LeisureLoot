@@ -256,7 +256,7 @@ function OfferHelpPage() {
             className={"font-weight-bold mt-0"}
             htmlFor={"minidealpricehelper"}
           >
-            Minimum Ideal Price($)
+            Minimum Price($)
           </label>
           <input
             type="number"
@@ -267,7 +267,7 @@ function OfferHelpPage() {
           />
           <br />
           <label className={"font-weight-bold"} htmlFor={"maxidealpricehelper"}>
-            Maximum Ideal Price($)
+            Maximum Price($)
           </label>
           <input
             type="number"
@@ -313,7 +313,8 @@ function OfferHelpPage() {
 
   //the helper tables with all the offers (Offer help)
   function SeekTableMain() {
-    let openData = Seeks.filter(item => item["Status"] !== 'Approved');
+    //status pending or open
+    let openData = Seeks.filter(item => item["Status"] === 'Pending' || item["Status"] === 'Open');
     let HelperFiltered = filter_on_post(openData, Category_help_Select);
     return (
       <Container fluid className={"mt-5 table"}>

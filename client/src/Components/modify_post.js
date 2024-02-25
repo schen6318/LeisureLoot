@@ -16,6 +16,7 @@ function ModifyPost(props) {
   let [Longitude, setLongitude] = useState(props.information.Longitude);
   let [Error, setError] = useState("");
   let [points, setPoints] = useState(props.Points);
+  //location
   const { user } = useUser();
   
   const Mode = props.information.Mode;
@@ -46,11 +47,11 @@ function ModifyPost(props) {
   };
 
   useEffect(() => {
-    async function fetchPoints() {
+    async function fetchPointsAndLocation() {
       try {
         console.log('Fetching points...');
         console.log(user);
-        const response = await fetch(`/api/check-points/${user.id}`);
+        const response = await fetch(`/api/check-points-and-location/${user.id}`);
         console.log('Response:', response);
         if (!response.ok) {
           console.error('Fetch failed:', response.statusText);
@@ -61,14 +62,18 @@ function ModifyPost(props) {
         if (data.error) {
           console.error('Error fetching points:', data.error);
         } else {
+          //city street zip
           setPoints(data.points);
           console.log('Points:', data.points);
+          console.log('City:', data.city);
+          console.log('street:', data.street);
+          console.log('zip:', data.zip);
         }
       } catch (error) {
         console.error('Error fetching points:', error);
       }
     }
-    fetchPoints();
+    fetchPointsAndLocation();
   }, []);
 
   //when the user hit the submit button of the form
@@ -159,8 +164,7 @@ function ModifyPost(props) {
           <Modal.Title>Edit</Modal.Title>
         </Modal.Header>
         <form id="contact-form" name="contact-form">
-          <Modal.Body>
-            <p>{Error}</p>
+          <Modal.Body>          
             <select
               className={"category mb-2"}
               aria-label="category"
@@ -197,23 +201,17 @@ function ModifyPost(props) {
             <div className="row">
               <div className="col-md-12">
                 <div className="md-form mb-0">     
-                  <label htmlFor="points">Points balance</label>
-                  <input
-                    type="text"
-                    id="points"
-                    value={points}
-                    readOnly
-                    
-                  />
+                  <label htmlFor="points" style={{ marginRight: '10px' }}>Points balance:</label>
+                  <span id="points">{points}</span>
                   <br />
                 </div>
               </div>
             </div>
-
+            <br/>
             <div className="row">
               <div className="col-md-12">
                 <div className="md-form mb-0">
-                  <label htmlFor="price">Price (CAD per hour/item/job)</label>
+                  <label htmlFor="price">Price (points)</label>
                   <input
                     type="number"
                     id="price"
@@ -254,6 +252,17 @@ function ModifyPost(props) {
               setGeoState={setGeoState}
               setZip={setZipcode}
             /> */}
+            <div className="row">
+              <div className="col-md-12">
+                <div className="md-form mb-0">     
+                  <label htmlFor="location" style={{ marginRight: '10px' }}>Location:</label>
+                  <span id="location">{Address} {Zipcode}</span>
+                  <br />
+                </div>
+              </div>
+            </div>
+
+            <p style={{color: "red"}}>{Error}</p>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="primary" onClick={handleEdit}>

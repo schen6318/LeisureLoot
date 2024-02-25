@@ -248,7 +248,7 @@ function SeekHelpPage() {
         </div>
         <div className={"mt-1"}>
           <label className={"font-weight-bold"} htmlFor="textmininput">
-            Minimum Ideal Price($):
+            Minimum Price($):
           </label>
 
           <input
@@ -260,7 +260,7 @@ function SeekHelpPage() {
           />
           <br />
           <label className={"font-weight-bold"} htmlFor="textmaxinput">
-            Maximum Ideal Price($):
+            Maximum Price($):
           </label>
           <input
             type="number"
