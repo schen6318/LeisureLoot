@@ -24,7 +24,7 @@ function SeekHelpTable({ data, totalPosts, loginStatus, loginUsername }) {
           <tr>
             <th>Category</th>
             <th>Task Short Description</th>
-            <th>Ideal Price/hr</th>
+            <th>Price</th>
             <th>Date for task</th>
             <th>State</th>
             <th>More details</th>

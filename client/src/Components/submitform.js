@@ -236,7 +236,7 @@ function SubmitForm() {
             <div className="row">
               <div className="col-md-12">
                 <div className="md-form mb-0">     
-                  <label htmlFor="location" style={{ marginRight: '10px' }}>Location:</label>
+                  <label htmlFor="location" style={{ marginRight: '10px' }}>Location from Profile:</label>
                   <span id="location">{Address} {Zipcode}</span>
                   <br />
                 </div>
