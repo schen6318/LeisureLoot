@@ -16,7 +16,6 @@ function ModifyPost(props) {
   let [Longitude, setLongitude] = useState(props.information.Longitude);
   let [Error, setError] = useState("");
   let [points, setPoints] = useState(props.Points);
-  //location
   const { user } = useUser();
   
   const Mode = props.information.Mode;

@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Button, Modal } from "react-bootstrap";
 import AddressAutoComplete from "./autocomplete";
-import { useUser } from "../contexts/UserContext";
+import { useUser, RefreshDataContext } from "../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 
 function SubmitForm() {
@@ -20,6 +21,8 @@ function SubmitForm() {
   // Add a new state variable for status
   let [Status, setStatus] = useState("Open");
   const { user } = useUser();
+  const navigate = useNavigate();
+  const { refreshData, setRefreshData } = useContext(RefreshDataContext);
 
   const categoryOptions = [
     "Select Category",
@@ -114,7 +117,9 @@ function SubmitForm() {
 
         setStatus("Open");
         setShow(false);
-        window.location.reload(true);
+        // window.location.reload(true);
+        navigate('/manage');
+        setRefreshData(true);
       } catch (e) {}
     }
   };

@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import ModifyPost from "./modify_post.js";
 import SubmitForm from "./submitform";
 import MessageReceived from "./MessageReceived";
 import Navbar from "./Navbar.js";
 import Footer from "./Footer.js";
+import {RefreshDataContext} from "../contexts/UserContext.js"
 
 function PostForm2() {
   //all posts that belongs to this user.
   const [Post, setPosts] = useState([]);
   let [login, setLogin] = useState(false);
+  const { refreshData, setRefreshData } = useContext(RefreshDataContext);
 
   useEffect(() => {
     async function func() {
@@ -25,7 +27,7 @@ function PostForm2() {
       }
     }
     func().catch(console.dir());
-  }, []);
+  }, [refreshData]);
 
   function LoadPost() {
     if (Post.length === 0) {
