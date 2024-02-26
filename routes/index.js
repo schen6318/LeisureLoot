@@ -156,7 +156,7 @@ router.post("/submit-message", async (req, res) => {
 
 //must be changed 6
 router.get("/get-received-message", async (req, res) => {
-  console.log("getting received messages...");
+  // console.log("getting received messages...");
   await myDB.retrieveReceivedMessage(req, res);
 });
 
@@ -177,6 +177,27 @@ router.post("/update-points", async (req, res) => {
     }
   } catch (error) {
     console.error("Error updating user points:", error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+});
+
+router.post("/deductPoints", async (req, res) => {
+  try {
+    const { userId, pointsToDeduct } = req.body;
+    const result = await myDB.deductPoints(userId, pointsToDeduct);
+    console.log(result);
+    if (result) {
+      console.log("Deducted OK");
+      res.send({
+        points: result.points,
+      });
+    } else {
+      res.send({
+        message: "Points deducted failed",
+      });
+    }
+  } catch (error) {
+    console.error("Error deducting user points:", error);
     res.status(500).send({ message: "Internal server error" });
   }
 });

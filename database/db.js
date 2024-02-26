@@ -206,9 +206,25 @@ function myDB() {
     res
   ) => {
     const messagedb = project_database.collection("message");
+    let senderUser;
+    if (
+      typeof senderUsername === "object" &&
+      senderUsername !== null &&
+      senderUsername.username
+    ) {
+      senderUser = senderUsername.username;
+    } else if (typeof senderUsername === "string") {
+      senderUser = senderUsername;
+    } else {
+      console.error("Invalid senderUsername format");
+      res
+        .status(400)
+        .json({ status: "error", message: "Invalid senderUsername format" });
+      return;
+    }
     const write_info = {
       postid: postid,
-      senderUsername: senderUsername,
+      senderUsername: senderUser,
       receiverUsername: receiverUsername,
       message: message,
     };
@@ -249,8 +265,9 @@ function myDB() {
     }
   };
 
-  //Sophia: get user points
-myDB.getPointsAndLocation = async (userId) => {
+  //Sophia: get user points and location
+
+  myDB.getPointsAndLocation = async (userId) => {
   const collection = project_database.collection("userProfile");
   const idString = userId.$oid;
   try {    
@@ -272,7 +289,25 @@ myDB.getPointsAndLocation = async (userId) => {
     console.error("Error getting user points from DB:", e);
     throw e;
   }
-};
+  };
+
+
+
+  myDB.deductPoints = async (userId, pointsToDeduct) => {
+    const collection = project_database.collection("userProfile");
+    try {
+      const result = await collection.findOneAndUpdate(
+        { _id: new ObjectId(userId) },
+        { $inc: { points: -pointsToDeduct } },
+        { returnOriginal: false }
+      );
+      // console.log(result);
+      return result;
+    } catch (e) {
+      console.error("Error deducting user points in DB", e);
+      throw e;
+    }
+  };
 
   return myDB;
 }

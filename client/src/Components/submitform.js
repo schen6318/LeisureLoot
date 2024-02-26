@@ -92,11 +92,23 @@ function SubmitForm() {
       } else if (isNaN(parseInt(Price))) {
         setError("Price given is invalid. Please try again.");
       }
-      
-    }else if(parseInt(Price)>parseInt(points)) {
-      setError("You don't have enough points to post this task, please go to profile to deposit more points.");
-    }else {
+    } else if (parseInt(Price) > parseInt(points)) {
+      setError(
+        "You don't have enough points to post this task, please go to profile to deposit more points."
+      );
+    } else {
+      const pointsToDeduct = parseInt(Price);
+      // console.log(user);
       try {
+        await fetch(`/api/deductPoints`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: user.id,
+            pointsToDeduct: pointsToDeduct,
+          }),
+        });
+
         await fetch("/api/submit-form", {
           method: "POST",
           headers: { "Content-Type": "application/json" },

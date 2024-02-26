@@ -41,7 +41,7 @@ function CommentBox(props) {
     if (props.loginStatus) {
       setUsable(true);
       setButtonText("Reject");
-      setmessage('Sorry, your order has been rejected!');
+      setmessage("Sorry, your order has been rejected!");
     } else {
       setUsable(false);
       setButtonText("Login to Reject the order");
@@ -55,6 +55,7 @@ function CommentBox(props) {
         variant="primary"
         onClick={handleShow}
         disabled={!usable}
+        style={{ padding: "2px" }}
       >
         {buttonText}
       </Button>
