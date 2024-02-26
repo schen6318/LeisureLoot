@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext } from "react";
 import { Button, Modal } from "react-bootstrap";
 import AddressAutoComplete from "./autocomplete";
 import PropTypes from "prop-types";
-import { useUser } from "../contexts/UserContext";
+import { useUser, RefreshDataContext } from "../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 // import Categories from "../Other Components/Categories";
 function ModifyPost(props) {
   let [Subject, setSubject] = useState(props.information.Description);
@@ -17,6 +18,9 @@ function ModifyPost(props) {
   let [Error, setError] = useState("");
   let [points, setPoints] = useState(props.Points);
   const { user } = useUser();
+  const navigate = useNavigate();
+  const { refreshData, setRefreshData } = useContext(RefreshDataContext);
+
   
   const Mode = props.information.Mode;
   const id = props.information._id;
@@ -107,7 +111,8 @@ function ModifyPost(props) {
         }),
       });
       setShow(false);
-      window.location.reload(true);
+      navigate('/manage');
+      setRefreshData(true);
     }
   };
 
