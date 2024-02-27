@@ -170,7 +170,7 @@ function Profile() {
                         <PayPalScriptProvider
                           options={{
                             "client-id":
-                              "ARpYR5BA7ypNC7jb8hc6m5kugA-_fxpSXHFvZCuxhSaBzERPOzmcP8GKvWx3vOZ9yOCuKXiyGOOq7aF1",
+                              "AUjBCRb2IcrJ61pWifzEnevWi7frV3CyonWiJMkdKQlorjcu8CKZcj3mN5vw46021Yp6KUf-0GY9m-hb",
                           }}
                         >
                           <AddPoints

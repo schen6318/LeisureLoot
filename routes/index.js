@@ -128,6 +128,11 @@ router.get("/load-user-posts", async (req, res) => {
   await myDB.getComments(req, res).catch(console.dir);
 });
 
+router.get("/load-other-posts", async (req, res) => {
+  //console.log("Loading other's posts...");
+  await myDB.getCommentsOthers(req, res).catch(console.dir);
+});
+
 router.post("/edit-post", async (req, res) => {
   // console.log("Editing post request submitted!");
   await myDB.edit_post(req, res).catch(console.dir);
@@ -159,6 +164,12 @@ router.get("/get-received-message", async (req, res) => {
   // console.log("getting received messages...");
   await myDB.retrieveReceivedMessage(req, res);
 });
+
+router.get("/get-received-othermessage", async (req, res) => {
+  console.log("getting received other messages...");
+  await myDB.retrieveReceivedOtherMessage(req, res);
+});
+
 
 //iteration2-sissy: update points
 router.post("/update-points", async (req, res) => {
@@ -200,6 +211,12 @@ router.post("/deductPoints", async (req, res) => {
     console.error("Error deducting user points:", error);
     res.status(500).send({ message: "Internal server error" });
   }
+});
+
+//iteration2-bob: transfer points
+router.post("/transfer-points", async (req, res) => {
+  // console.log("Transfer points request submitted!");
+  await myDB.transfer_points(req, res).catch(console.dir);
 });
 
 module.exports = router;

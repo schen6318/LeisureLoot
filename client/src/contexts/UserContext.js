@@ -16,6 +16,14 @@ export const UserProvider = ({ children }) => {
     }
   }, []);
 
+  useEffect(() => {
+    const storedUserJSON = localStorage.getItem("user");
+    if (storedUserJSON) {
+      const storedUser = JSON.parse(storedUserJSON);
+      setUser(storedUser);
+    }
+  }, []);
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");

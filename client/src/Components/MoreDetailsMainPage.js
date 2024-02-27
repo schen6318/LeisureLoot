@@ -42,16 +42,22 @@ function MoreDetails(props) {
           /> */}
         </Modal.Body>
         <Modal.Footer>
-          <TakeOrderBox
+          {
+          props.loginUsername !== props.json.username && 
+            <TakeOrderBox
+              json={props.json}
+              loginStatus={props.loginStatus}
+              loginUsername={props.loginUsername}
+            />
+          }
+          {
+          props.loginUsername !== props.json.username && 
+            <CommentBox
             json={props.json}
             loginStatus={props.loginStatus}
             loginUsername={props.loginUsername}
-          />
-          <CommentBox
-            json={props.json}
-            loginStatus={props.loginStatus}
-            loginUsername={props.loginUsername}
-          />
+            />
+          }
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>

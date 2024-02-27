@@ -187,6 +187,37 @@ function myDB() {
     return result1;
   };
 
+  myDB.getCommentsOthers = async (req, res) => {
+    let query1;
+    if (req.user === "admin@admin") {
+      query1 = {};
+    } else {
+      query1 = { senderUsername: req.user.username };
+    }
+    const message_db = project_database.collection("message");
+    const messagefilter_db = await message_db.find(query1).toArray();
+    const postidArray = messagefilter_db.map(doc => doc.postid);
+    const uniquePostidArray = [...new Set(postidArray)];
+
+    const objectIdArray = uniquePostidArray.map(id => new ObjectId(id));
+
+    const post_db = project_database.collection("posts");
+    const posts = await post_db.find({ username: { $ne: req.user.username }, _id: { $in: objectIdArray } }).toArray();
+
+    res.send(posts);
+    return posts;
+  };
+
+  //get all the offer help posts in the database.
+  myDB.getAllHelpOfferPosts = async (bol, res) => {
+    // console.log("Loading all posts from database.");
+    // console.log(bol);
+    const post_db = project_database.collection("helper");
+    let result = await post_db.find({}).sort({ "Ideal Price": bol }).toArray();
+    res.json(result);
+    // console.log("loaded");
+    return result;
+  };
 
   //get all the seek help posts in the database.
   myDB.getAllSeekPosts = async (bol, res) => {
@@ -236,6 +267,14 @@ function myDB() {
     const filter = { receiverUsername: req.user.username };
     const messagedb = project_database.collection("message");
     const result = await messagedb.find(filter).toArray();
+    res.json(result);
+  };
+
+  myDB.retrieveReceivedOtherMessage = async (req, res) => {
+    const filter = { $or: [{ senderUsername: req.user.username }, { receiverUsername: req.user.username }] };
+    const messagedb = project_database.collection("message");
+    const result = await messagedb.find(filter).toArray();
+    console.log(result);
     res.json(result);
   };
 
@@ -308,6 +347,39 @@ function myDB() {
       throw e;
     }
   };
+
+  //iteration2-bob: after confirmation, transfer points to offer-help user 
+  myDB.transfer_points = async (req, res) => {
+    let target_database1;
+    let target_database2;
+    let target_database3;
+    let json = req.body;
+
+    target_database1 = project_database.collection("posts");
+    target_database2 = project_database.collection("userInfo");
+    target_database3 = project_database.collection("userProfile");
+
+    const query1 = { _id: new ObjectId(json.postid) };
+    const post = await target_database1.findOne(query1);
+    const points = post["Ideal Price"];
+
+    const query2 = { username: json.username }; 
+    const targetUser = await target_database2.findOne(query2);
+
+    const query3 = { _id: new ObjectId(targetUser._id)};
+    const targetUserProfile = await target_database3.findOne(query3);
+    
+    const newPoints = targetUserProfile.points + points;
+    const update = {
+      $set: {
+        points: newPoints,
+      },
+    };
+    await target_database3.updateOne(query3, update);
+    console.log("Points successfully transferred!");
+    res.json({ status: true });
+  };
+
 
   return myDB;
 }
