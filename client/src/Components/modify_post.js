@@ -155,7 +155,7 @@ function ModifyPost(props) {
   return (
     <>
       <Button variant="secondary" onClick={handleShow}>
-        Edit or Delete Post
+        Edit or Delete
       </Button>
 
       <Modal
@@ -165,7 +165,7 @@ function ModifyPost(props) {
         aria-labelledby={"modifyPost"}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Edit or Delete Post</Modal.Title>
+          <Modal.Title>Edit or Delete</Modal.Title>
         </Modal.Header>
         <form id="contact-form" name="contact-form">
           <Modal.Body>          
