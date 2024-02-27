@@ -18,6 +18,7 @@ function MoreDetails(props) {
         className={"moredetailbutton"}
         variant="primary"
         onClick={handleShow}
+        style={{ width:"100px"}}
       >
         Details
       </button>

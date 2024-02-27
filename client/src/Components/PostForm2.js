@@ -5,7 +5,7 @@ import MessageReceived from "./MessageReceived.js";
 import MessageReceivedOthers from "./MessageReceivedOthers.js";
 import Navbar from "./Navbar.js";
 import Footer from "./Footer.js";
-import {RefreshDataContext} from "../contexts/UserContext.js"
+import {useUser, RefreshDataContext} from "../contexts/UserContext.js"
 
 function PostForm2() {
   //all posts that belongs to this user.
@@ -14,6 +14,7 @@ function PostForm2() {
   const { refreshData, setRefreshData } = useContext(RefreshDataContext);
   const [otherPost, setOtherPosts] = useState([]);
   const [loginUsername, setLoginUsername] = useState("");
+  const { user, isLoggedIn } = useUser();
 
   useEffect(() => {
     async function func() {
@@ -28,10 +29,14 @@ function PostForm2() {
             console.log("Got post", post);
             setPosts(post);
           });
+      } else if (isLoggedIn) { 
+        setLogin(true);
+        console.log("=========");
+        console.log(user);
       }
     }
     func().catch(console.dir());
-  }, [refreshData]);
+  }, [refreshData, isLoggedIn]);
 
   function LoadPost() {
     if (Post.length === 0) {
@@ -46,7 +51,7 @@ function PostForm2() {
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Username</th>
+              <th scope="col">Publisher</th>
               <th scope="col">Category</th>
               <th scope="col">Description</th>
               <th scope="col">Price (points)</th>
@@ -117,7 +122,7 @@ function PostForm2() {
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Username</th>
+              <th scope="col">Publisher</th>
               <th scope="col">Category</th>
               <th scope="col">Description</th>
               <th scope="col">Price (points)</th>

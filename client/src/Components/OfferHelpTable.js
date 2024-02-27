@@ -24,22 +24,28 @@ function OfferHelpTable({ data, totalPosts, loginStatus, loginUsername }) {
     <table className="table">
       <thead>
         <tr>
+          <th scope="Col" className="text-center">Publisher</th>
           <th scope="Col" className="text-center">Category</th>
           <th scope="Col" className="text-center">Description</th>
-          <th scope="Col" className="text-center">Price</th>
-          <th scope="Col" className="text-center">Post Status</th>
+          <th scope="Col" className="text-center">Price (points)</th>
+          <th scope="Col" className="text-center">Date for task</th>
+          <th scope="Col" className="text-center">Zip Code</th>
+          <th scope="Col" className="text-center">Address</th>
           <th scope="Col" className="text-center">Action</th>
         </tr>
       </thead>
       <tbody id="post_content">
         {currentPost.map((h, i) => ( 
           <tr key={i}>
+            <td className="text-center" >{h.username}</td>
             <td className="text-center" >{h.Category}</td>
             <td className="text-center" >{h.Description}</td>
             <td className="text-center" >{h["Ideal Price"]}</td>
-            <td className="text-center" >{h.Status}</td>
+            <td className="text-center" >{h["Date for task"]}</td>
+            <td className="text-center" >{h["Zip Code"]}</td>
+            <td className="text-center" >{h.Address}</td>
             <td className="text-center" > 
-              <div >
+              <div style={{ width:"100px"}}>
                 <MoreDetails
                     json={h}
                     loginStatus={loginStatus}

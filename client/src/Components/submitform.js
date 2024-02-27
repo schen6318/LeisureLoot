@@ -71,6 +71,13 @@ function SubmitForm() {
       }
     }
     fetchPointsAndLocation();
+    // return () => {
+    //   // 重置状态变量的值
+    //   setSubject("");
+    //   setCategory("Select Category");
+    //   setPrice("");
+    //   setDate("");
+    // };
   }, []);
 
   
@@ -130,8 +137,12 @@ function SubmitForm() {
         setStatus("Open");
         setShow(false);
         // window.location.reload(true);
-        navigate('/manage');
+        
         setRefreshData(true);
+        // Wait for a short time before navigating to the new page
+        setTimeout(() => {
+          navigate('/manage');
+        }, 100);
       } catch (e) {}
     }
   };

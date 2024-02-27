@@ -111,8 +111,12 @@ function ModifyPost(props) {
         }),
       });
       setShow(false);
-      navigate('/manage');
+      
       setRefreshData(true);
+      // Wait for a short time before navigating to the new page
+      setTimeout(() => {
+        navigate('/manage');
+      }, 100);
     }
   };
 
@@ -205,7 +209,7 @@ function ModifyPost(props) {
             <div className="row">
               <div className="col-md-12">
                 <div className="md-form mb-0">     
-                  <label htmlFor="points" style={{ marginRight: '10px' }}>Points balance:</label>
+                  <label htmlFor="points" style={{ marginRight: '10px' }}>Points Balance:</label>
                   <span id="points">{points}</span>
                   <br />
                 </div>
@@ -233,7 +237,7 @@ function ModifyPost(props) {
               <div className="col-md-12">
                 <div className="md-form mb-0">
                   <label htmlFor="date" className="">
-                    Date for Subject
+                    Date for Task
                   </label>
                   <input
                     type="date"
