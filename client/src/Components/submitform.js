@@ -41,46 +41,48 @@ function SubmitForm() {
   };
 
 
-  //check points balance and location
-  useEffect(() => {
-    async function fetchPointsAndLocation() {
-      try {
-        console.log('Fetching points and location...');
-        console.log(user);
-        const response = await fetch(`/api/check-points-and-location/${user.id}`);
-        console.log('Response:', response);
-        if (!response.ok) {
-          console.error('Fetch failed:', response.statusText);
-          return;
-        }
-        const data = await response.json();
-        console.log('Data:', data);
-        if (data.error) {
-          console.error('Error fetching points:', data.error);
-        } else {
-          setPoints(data.points);
-          console.log('Points:', data.points);
-          console.log('City:', data.city);
-          console.log('street:', data.street);
-          console.log('zip:', data.zip);
-          setZipcode(data.zip);
-          setAddress(data.street+', '+ data.city);
-        }
-      } catch (error) {
-        console.error('Error fetching points:', error);
-      }
-    }
-    fetchPointsAndLocation();
-    // return () => {
-    //   // 重置状态变量的值
-    //   setSubject("");
-    //   setCategory("Select Category");
-    //   setPrice("");
-    //   setDate("");
-    // };
-  }, []);
+  // useEffect(() => {
+    
+  // }, []);
 
-  
+ 
+async function fetchPointsAndLocation() {
+  try {
+    console.log('Fetching points and location...');
+    console.log(user);
+    const response = await fetch(`/api/check-points-and-location/${user.id}`);
+    console.log('Response:', response);
+    if (!response.ok) {
+      console.error('Fetch failed:', response.statusText);
+      return;
+    }
+    const data = await response.json();
+    console.log('Data:', data);
+    if (data.error) {
+      console.error('Error fetching points and location:', data.error);
+    } else {
+      setPoints(data.points);
+      console.log('Points:', data.points);
+      console.log('City:', data.city);
+      console.log('street:', data.street);
+      console.log('zip:', data.zip);
+      setZipcode(data.zip);
+      setAddress(data.street+', '+ data.city);
+    }
+  } catch (error) {
+    console.error('Error fetching points and location:', error);
+  }
+}
+
+// Call fetchPointsAndLocation in handleShow
+const handleShow = () => {
+  setSubject("");
+  setCategory("Select Category");
+  setPrice("");
+  setDate("");
+  fetchPointsAndLocation();
+  setShow(true);
+};
 
   let priceChange = (event) => {
     setPrice(event.target.value);
@@ -148,7 +150,7 @@ function SubmitForm() {
   };
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  // const handleShow = () => setShow(true);
 
   return (
     <>

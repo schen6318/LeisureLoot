@@ -9,6 +9,7 @@ function ModifyPost(props) {
   let [Subject, setSubject] = useState(props.information.Description);
   let [Category, setCategory] = useState(props.information.Category);
   let [Price, setPrice] = useState(props.information["Ideal Price"]);
+  let [OriginalPrice, setOriginalPrice] = useState(props.information["Ideal Price"]);
   let [Date, setDate] = useState(props.information["Date for task"]);
   let [Zipcode, setZipcode] = useState(props.information["Zip Code"]);
   let [Address, setAddress] = useState(props.information["Address"]);
@@ -39,7 +40,9 @@ function ModifyPost(props) {
   };
 
   let priceChange = (event) => {
-    setPrice(event.target.value);
+    
+    const newPrice = event.target.value;
+    setPrice(newPrice);
   };
   let dateChange = (event) => {
     setDate(event.target.value);
@@ -49,35 +52,34 @@ function ModifyPost(props) {
     setCategory(event.target.value);
   };
 
-  useEffect(() => {
-    async function fetchPointsAndLocation() {
-      try {
-        console.log('Fetching points...');
-        console.log(user);
-        const response = await fetch(`/api/check-points-and-location/${user.id}`);
-        console.log('Response:', response);
-        if (!response.ok) {
-          console.error('Fetch failed:', response.statusText);
-          return;
-        }
-        const data = await response.json();
-        console.log('Data:', data);
-        if (data.error) {
-          console.error('Error fetching points:', data.error);
-        } else {
-          //city street zip
-          setPoints(data.points);
-          console.log('Points:', data.points);
-          console.log('City:', data.city);
-          console.log('street:', data.street);
-          console.log('zip:', data.zip);
-        }
-      } catch (error) {
-        console.error('Error fetching points:', error);
+
+  async function fetchPointsAndLocation() {
+    try {
+      console.log('Fetching points and location...');
+      console.log(user);
+      const response = await fetch(`/api/check-points-and-location/${user.id}`);
+      console.log('Response:', response);
+      if (!response.ok) {
+        console.error('Fetch failed:', response.statusText);
+        return;
       }
+      const data = await response.json();
+      console.log('Data:', data);
+      if (data.error) {
+        console.error('Error fetching points and location:', data.error);
+      } else {
+        setPoints(data.points);
+        console.log('Points:', data.points);
+        console.log('City:', data.city);
+        console.log('street:', data.street);
+        console.log('zip:', data.zip);
+        setZipcode(data.zip);
+        setAddress(data.street+', '+ data.city);
+      }
+    } catch (error) {
+      console.error('Error fetching points and location:', error);
     }
-    fetchPointsAndLocation();
-  }, []);
+  }
 
   //when the user hit the submit button of the form
   const handleEdit = async () => {
@@ -93,30 +95,60 @@ function ModifyPost(props) {
       }else if(parseInt(Price)>parseInt(points)) {
         setError("You don't have enough points to post this task, please go to profile to deposit more points.");
       }else {
-      await fetch("/api/edit-post", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          _id: id,
-          Mode: "SeekHelp",
-          Description: Subject,
-          Category: Category,
-          "Ideal Price": parseInt(Price),
-          "Date for task": Date,
-          "Zip Code": Zipcode,
-          Address: Address,
-          Latitude: Latitude,
-          Longitude: Longitude,
-          State: GeoState,
-        }),
-      });
-      setShow(false);
+        //
+        console.log(Price  + '========' +OriginalPrice);
+        if (Price !== OriginalPrice) {
+          // The price has changed, so we need to update the points
+          if (Price > OriginalPrice) {
+            // The price has increased, so we need to deduct the difference from the user's points
+            const pointsToDeduct = Price - OriginalPrice;
+            await fetch(`/api/deductPoints`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                userId: user.id,
+                pointsToDeduct: pointsToDeduct,
+              }),
+            });
+          } else if (Price < OriginalPrice) {
+            // The price has decreased, so we need to add the difference to the user's points
+            const pointsToAdd = OriginalPrice - Price;
+            await fetch("/api/update-points", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                userId: user.id,
+                pointsToAdd: pointsToAdd,
+              }),
+            });
+          }
+          // Update the original price
+          setOriginalPrice(Price);
+        }
       
-      setRefreshData(true);
-      // Wait for a short time before navigating to the new page
-      setTimeout(() => {
-        navigate('/manage');
-      }, 100);
+          
+          await fetch("/api/edit-post", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            _id: id,
+            Mode: "SeekHelp",
+            Description: Subject,
+            Category: Category,
+            "Ideal Price": parseInt(Price),
+            "Date for task": Date,
+            "Zip Code": Zipcode,
+            Address: Address,
+            Latitude: Latitude,
+            Longitude: Longitude,
+            State: GeoState,
+          }),
+        });
+      setShow(false);
+      window.location.reload(true);
+      
     }
   };
 
@@ -154,7 +186,10 @@ function ModifyPost(props) {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleShow = () => {
+    setShow(true);
+    fetchPointsAndLocation();
+  };
 
   return (
     <>

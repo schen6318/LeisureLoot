@@ -29,7 +29,6 @@ function OfferHelpTable({ data, totalPosts, loginStatus, loginUsername }) {
           <th scope="Col" className="text-center">Description</th>
           <th scope="Col" className="text-center">Price (points)</th>
           <th scope="Col" className="text-center">Date for task</th>
-          <th scope="Col" className="text-center">Zip Code</th>
           <th scope="Col" className="text-center">Address</th>
           <th scope="Col" className="text-center">Action</th>
         </tr>
@@ -42,7 +41,6 @@ function OfferHelpTable({ data, totalPosts, loginStatus, loginUsername }) {
             <td className="text-center" >{h.Description}</td>
             <td className="text-center" >{h["Ideal Price"]}</td>
             <td className="text-center" >{h["Date for task"]}</td>
-            <td className="text-center" >{h["Zip Code"]}</td>
             <td className="text-center" >{h.Address}</td>
             <td className="text-center" > 
               <div style={{ width:"100px"}}>

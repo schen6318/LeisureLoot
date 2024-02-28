@@ -36,6 +36,7 @@ function MoreDetails(props) {
           <p>Email: {props.json.username}</p>
           <p>Price: {props.json["Ideal Price"]}</p>
           <p>Address: {props.json.Address}</p>
+          <p>Zip Code: {props.json["Zip Code"]}</p>
           {/* <p>Location on Map:</p>
           <Map
             longitude={props.json.Longitude}
