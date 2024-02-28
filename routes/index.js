@@ -164,9 +164,7 @@ router.get("/get-received-message", async (req, res) => {
 router.post("/update-points", async (req, res) => {
   try {
     const { userId, pointsToAdd } = req.body;
-
     const updateResult = await myDB.addPoints(userId, pointsToAdd);
-
     if (updateResult.error) {
       res.status(400).send({ message: updateResult.error });
     } else {
@@ -181,9 +179,11 @@ router.post("/update-points", async (req, res) => {
   }
 });
 
+//deduct point when submitting new post
 router.post("/deductPoints", async (req, res) => {
   try {
     const { userId, pointsToDeduct } = req.body;
+    console.log(userId, pointsToDeduct);
     const result = await myDB.deductPoints(userId, pointsToDeduct);
     console.log(result);
     if (result) {
@@ -198,6 +198,52 @@ router.post("/deductPoints", async (req, res) => {
     }
   } catch (error) {
     console.error("Error deducting user points:", error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+});
+
+//adjust points when editing post
+router.post("/adjustPoints", async (req, res) => {
+  try {
+    //fetch old price and find out the difference of old and new
+    const { userId, postId, newPrice } = req.body;
+    const oldPrice = await myDB.fetchOldPrice(postId);
+    const priceDifference = newPrice - oldPrice;
+    //process of points adjustment
+    const result = await myDB.adjustPoints(userId, priceDifference);
+    if (result) {
+      console.log("Adjusted OK");
+      res.send({
+        points: result.points,
+      });
+    } else {
+      res.send({
+        message: "Points adjusted failed",
+      });
+    }
+  } catch (error) {
+    console.error("Error adjusting points:", error);
+    res.status(500).send({ message: "Internal server error" });
+  }
+});
+
+//refund points when deleting post
+router.post("/refundPoints", async (req, res) => {
+  try {
+    const { userId, refund } = req.body;
+    const result = await myDB.refundPoints(userId, refund);
+    if (result) {
+      console.log("Refund OK");
+      res.send({
+        points: result.points,
+      });
+    } else {
+      res.send({
+        message: "Points refund failed",
+      });
+    }
+  } catch (error) {
+    console.error("Error refund user points:", error);
     res.status(500).send({ message: "Internal server error" });
   }
 });

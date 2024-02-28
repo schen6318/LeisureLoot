@@ -308,6 +308,7 @@ function myDB() {
     }
   };
 
+  //deduct points
   myDB.deductPoints = async (userId, pointsToDeduct) => {
     const collection = project_database.collection("userProfile");
     try {
@@ -323,6 +324,51 @@ function myDB() {
       throw e;
     }
   };
+
+  //fetchOldPrice
+  myDB.fetchOldPrice = async (postId) => {
+    const collection = project_database.collection("posts");
+    try {
+      const post = await collection.findOne({ _id: new ObjectId(postId) });
+      return post ? post["Ideal Price"] : null;
+    } catch (e) {
+      console.error("Error fetching old price from DB", e);
+      throw e;
+    }
+  };
+
+  //adjustPoints
+  myDB.adjustPoints = async (userId, priceDifference) => {
+    const collection = project_database.collection("userProfile");
+    try {
+      const result = await collection.findOneAndUpdate(
+        { _id: new ObjectId(userId) },
+        { $inc: { points: -priceDifference } }, // Deducts or refunds points based on the sign of priceDifference
+        { returnOriginal: false }
+      );
+      return result;
+    } catch (e) {
+      console.error("Error adjusting points in DB", e);
+      throw e;
+    }
+  };
+
+  //refundPoints
+  myDB.refundPoints = async (userId, refund) => {
+    const collection = project_database.collection("userProfile");
+    try {
+      const result = await collection.findOneAndUpdate(
+        { _id: new ObjectId(userId) },
+        { $inc: { points: +refund } }, // Deducts or refunds points based on the sign of priceDifference
+        { returnOriginal: false }
+      );
+      return result;
+    } catch (e) {
+      console.error("Error adjusting points in DB", e);
+      throw e;
+    }
+  };
+
   return myDB;
 }
 
