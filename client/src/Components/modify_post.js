@@ -74,7 +74,7 @@ function ModifyPost(props) {
         console.log('street:', data.street);
         console.log('zip:', data.zip);
         setZipcode(data.zip);
-        setAddress(data.street+', '+ data.city);
+        setAddress(data.street+', '+ data.city +', ' + data.province);
       }
     } catch (error) {
       console.error('Error fetching points and location:', error);

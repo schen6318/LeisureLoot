@@ -316,6 +316,7 @@ function myDB() {
       // return result;
       return {
         points: result.points,
+        province: result.province,
         city: result.city,
         street: result.street,
         zip: result.zip

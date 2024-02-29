@@ -41,7 +41,7 @@ function CommentBox(props) {
   useEffect(() => {
     if (props.loginStatus) {
       setUsable(true);
-      setButtonText("Finish Order");
+      setButtonText("Finish");
       setmessage('I have finished the job. Please confirm!');
     } else {
       setUsable(false);
@@ -56,6 +56,7 @@ function CommentBox(props) {
         variant="primary"
         onClick={handleShow}
         disabled={!usable}
+        style={{padding: "2px"}}
       >
         {buttonText}
       </Button>

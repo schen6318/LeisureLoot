@@ -29,7 +29,7 @@ function OfferHelpTable({ data, totalPosts, loginStatus, loginUsername }) {
           <th scope="Col" className="text-center">Description</th>
           <th scope="Col" className="text-center">Price (points)</th>
           <th scope="Col" className="text-center">Date for task</th>
-          <th scope="Col" className="text-center">Address</th>
+          <th scope="Col" className="text-center">City</th>
           <th scope="Col" className="text-center">Action</th>
         </tr>
       </thead>
@@ -38,10 +38,10 @@ function OfferHelpTable({ data, totalPosts, loginStatus, loginUsername }) {
           <tr key={i}>
             <td className="text-center" >{h.username}</td>
             <td className="text-center" >{h.Category}</td>
-            <td className="text-center" >{h.Description}</td>
+            <td className="text-center" >{h.Description.length > 10 ? h.Description.slice(0, 10) + '...' : h.Description}</td>
             <td className="text-center" >{h["Ideal Price"]}</td>
             <td className="text-center" >{h["Date for task"]}</td>
-            <td className="text-center" >{h.Address}</td>
+            <td className="text-center" >{h.Address.split(',')[1]}</td>
             <td className="text-center" > 
               <div style={{ width:"100px"}}>
                 <MoreDetails

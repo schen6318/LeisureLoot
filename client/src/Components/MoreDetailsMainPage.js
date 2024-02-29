@@ -34,7 +34,9 @@ function MoreDetails(props) {
         </Modal.Header>
         <Modal.Body>
           <p>Email: {props.json.username}</p>
-          <p>Price: {props.json["Ideal Price"]}</p>
+          <p>Category: {props.json.Category}</p>
+          <p>Description: {props.json.Description}</p>
+          <p>Price: {props.json["Ideal Price"]} points</p>
           <p>Address: {props.json.Address}</p>
           <p>Zip Code: {props.json["Zip Code"]}</p>
           {/* <p>Location on Map:</p>

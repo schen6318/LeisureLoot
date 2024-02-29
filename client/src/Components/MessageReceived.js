@@ -39,6 +39,7 @@ function MessageReceived(props) {
         <Button variant="primary" onClick={handleShow}>
           Comments ({message.length})
         </Button>
+
         <Modal
           show={show}
           id={"moreDetailModal"}
@@ -49,7 +50,7 @@ function MessageReceived(props) {
             <Modal.Title>Details</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <table className="table" style={{ width: "540px" }}>
+            <table className="table">
               <thead>
                 <tr>
                   <th scope="col">#</th>
@@ -64,47 +65,50 @@ function MessageReceived(props) {
                     <th>{i + 1}</th>
                     <td
                       style={{
-                        maxWidth: "120px",
-                        wordBreak: "break-all",
+                        maxWidth: "100px",
+                        wordWrap: "break-word",
                         overflowWrap: "break-word",
                       }}
                     >
                       {p.senderUsername}
                     </td>
-                    <td
-                      style={{
-                        maxWidth: "180px",
-                        wordBreak: "break-all",
-                        overflowWrap: "break-word",
-                      }}
-                    >
-                      {p.message}
+                    <td>{p.message}</td>
+                    <td>
+                      <ReplyBox
+                        json={p}
+                        loginStatus={props.loginStatus}
+                        loginUsername={props.loginUsername}
+                      />
                     </td>
                     <td>
-                      <div
-                        style={{
-                          display: "flex",
-                          flexWrap: "wrap",
-                          gap: "5px",
-                          maxWidth: "180px",
-                        }}
-                      >
-                        <ReplyBox
-                          json={p}
-                          loginStatus={props.loginStatus}
-                          loginUsername={props.loginUsername}
-                        />
-                        <ApproveBox
-                          json={p}
-                          loginStatus={props.loginStatus}
-                          loginUsername={props.loginUsername}
-                        />
-                        <RejectBox
-                          json={p}
-                          loginStatus={props.loginStatus}
-                          loginUsername={props.loginUsername}
-                        />
-                      </div>
+                      {
+                        p.message === "I would like to take order!" &&
+                      <ApproveBox
+                        json={p}
+                        loginStatus={props.loginStatus}
+                        loginUsername={props.loginUsername}
+                      />
+                      }
+                    </td>
+                    <td>
+                      {
+                        p.message === "I would like to take order!" &&
+                      <RejectBox
+                        json={p}
+                        loginStatus={props.loginStatus}
+                        loginUsername={props.loginUsername}
+                      />
+                      }
+                    </td>
+                    <td>
+                      {
+                        p.message === "I have finished the job. Please confirm!" &&
+                      <ConfirmBox
+                        json={p}
+                        loginStatus={props.loginStatus}
+                        loginUsername={props.loginUsername}
+                      />
+                      }
                     </td>
                   </tr>
                 ))}
