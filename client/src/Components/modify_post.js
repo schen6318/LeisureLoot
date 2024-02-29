@@ -97,6 +97,7 @@ function ModifyPost(props) {
       }else {
         //
         console.log(Price  + '========' +OriginalPrice);
+       try{
         if (Price !== OriginalPrice) {
           // The price has changed, so we need to update the points
           if (Price > OriginalPrice) {
@@ -146,24 +147,26 @@ function ModifyPost(props) {
             State: GeoState,
           }),
         });
-      setShow(false);
-      window.location.reload(true);
-      
+        setShow(false);
+        window.location.reload(true);
+      } catch (e) {}
     }
   };
 
   //when the user hit the delete button of the form
   const handleDelete = async () => {
     //we also need to add a type checker to ensure numbers are numbers, strings are strings etc.
-    if (Category === "Select Category" || isNaN(parseInt(Price))) {
-      if (Category === "Select Category" && isNaN(parseInt(Price))) {
-        setError("Please select a category and input a valid price.");
-      } else if (Category === "Select Category") {
-        setError("Please select a category.");
-      } else if (isNaN(parseInt(Price))) {
-        setError("Price given is invalid. Please try again.");
-      }
-    } else {
+    const refund = parseInt(Price);
+    try {
+      await fetch("/api/refundPoints", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: user.id,
+          postId: id,
+          refund: refund,
+        }),
+      });
       await fetch("/api/delete-post", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -180,7 +183,7 @@ function ModifyPost(props) {
       });
       setShow(false);
       window.location.reload(true);
-    }
+    } catch (e) {}
   };
 
   const [show, setShow] = useState(false);
