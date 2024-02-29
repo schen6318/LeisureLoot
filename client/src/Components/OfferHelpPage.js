@@ -76,8 +76,9 @@ function OfferHelpPage() {
     }
     if (SearchItem !== "") {
       filtered_post = filtered_post.filter((item) =>
-        item.Description.includes(SearchItem)
+        item.Address.includes(SearchItem)
       );
+
     }
     if (select !== "Select Category") {
       filtered_post = filtered_post.filter((item) => item.Category === select);
@@ -145,7 +146,7 @@ function OfferHelpPage() {
             type="text"
             id={"searchbar"}
             ref={searchInput}
-            placeholder={"Search here"}
+            placeholder={"Enter city"}
           />
           <Button
             variant="secondary"
