@@ -5,13 +5,22 @@ import ReplyBox from "./ReplyBox.js";
 import ApproveBox from "./ApproveBox.js";
 import RejectBox from "./RejectBox.js";
 import ConfirmBox from "./ConfirmBox.js";
+import ChatBox from "./Chat.js";
 
 function MessageReceived(props) {
   let [message, setMessage] = useState([]);
   const [show, setShow] = useState(false);
+  const [receiver, setReceiver] = useState("");
+  const [chatBoxShow, setChatBoxShow] = useState(false);
+  const [hover, setHover] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const openChat = (username) => {
+    setReceiver(username);
+    setChatBoxShow(true);
+  };
 
   useEffect(() => {
     async function func() {
@@ -56,7 +65,9 @@ function MessageReceived(props) {
                   <th scope="col">#</th>
                   <th scope="col">From</th>
                   <th scope="col">Message</th>
-                  <th scope="col" colSpan="3">Action</th>
+                  <th scope="col" colSpan="3">
+                    Action
+                  </th>
                 </tr>
               </thead>
               <tbody id="message_content">
@@ -68,11 +79,22 @@ function MessageReceived(props) {
                         maxWidth: "100px",
                         wordWrap: "break-word",
                         overflowWrap: "break-word",
+                        cursor: "pointer",
+                        backgroundColor: hover ? "#e8e8e8" : "transparent",
+                        transition: "background-color 0.3s",
                       }}
+                      onMouseEnter={() => setHover(true)}
+                      onMouseLeave={() => setHover(false)}
+                      onClick={() => openChat(p.senderUsername)}
                     >
                       {p.senderUsername}
                     </td>
                     <td>{p.message}</td>
+                    <ChatBox
+                      show={chatBoxShow}
+                      handleClose={() => setChatBoxShow(false)}
+                      receiver={receiver}
+                    />
                     <td>
                       <ReplyBox
                         json={p}
@@ -81,34 +103,32 @@ function MessageReceived(props) {
                       />
                     </td>
                     <td>
-                      {
-                        p.message === "I would like to take order!" &&
-                      <ApproveBox
-                        json={p}
-                        loginStatus={props.loginStatus}
-                        loginUsername={props.loginUsername}
-                      />
-                      }
+                      {p.message === "I would like to take order!" && (
+                        <ApproveBox
+                          json={p}
+                          loginStatus={props.loginStatus}
+                          loginUsername={props.loginUsername}
+                        />
+                      )}
                     </td>
                     <td>
-                      {
-                        p.message === "I would like to take order!" &&
-                      <RejectBox
-                        json={p}
-                        loginStatus={props.loginStatus}
-                        loginUsername={props.loginUsername}
-                      />
-                      }
+                      {p.message === "I would like to take order!" && (
+                        <RejectBox
+                          json={p}
+                          loginStatus={props.loginStatus}
+                          loginUsername={props.loginUsername}
+                        />
+                      )}
                     </td>
                     <td>
-                      {
-                        p.message === "I have finished the job. Please confirm!" &&
-                      <ConfirmBox
-                        json={p}
-                        loginStatus={props.loginStatus}
-                        loginUsername={props.loginUsername}
-                      />
-                      }
+                      {p.message ===
+                        "I have finished the job. Please confirm!" && (
+                        <ConfirmBox
+                          json={p}
+                          loginStatus={props.loginStatus}
+                          loginUsername={props.loginUsername}
+                        />
+                      )}
                     </td>
                   </tr>
                 ))}

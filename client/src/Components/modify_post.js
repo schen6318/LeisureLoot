@@ -1,15 +1,20 @@
-import React, { useState, useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Button, Modal } from "react-bootstrap";
 import AddressAutoComplete from "./autocomplete";
 import PropTypes from "prop-types";
 import { useUser, RefreshDataContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 // import Categories from "../Other Components/Categories";
+
+const GEOCODING_API_KEY = process.env.REACT_APP_GEOCODING_API_KEY;
+
 function ModifyPost(props) {
   let [Subject, setSubject] = useState(props.information.Description);
   let [Category, setCategory] = useState(props.information.Category);
   let [Price, setPrice] = useState(props.information["Ideal Price"]);
-  let [OriginalPrice, setOriginalPrice] = useState(props.information["Ideal Price"]);
+  let [OriginalPrice, setOriginalPrice] = useState(
+    props.information["Ideal Price"]
+  );
   let [Date, setDate] = useState(props.information["Date for task"]);
   let [Zipcode, setZipcode] = useState(props.information["Zip Code"]);
   let [Address, setAddress] = useState(props.information["Address"]);
@@ -22,7 +27,6 @@ function ModifyPost(props) {
   const navigate = useNavigate();
   const { refreshData, setRefreshData } = useContext(RefreshDataContext);
 
-  
   const Mode = props.information.Mode;
   const id = props.information._id;
   const categoryOptions = [
@@ -40,7 +44,6 @@ function ModifyPost(props) {
   };
 
   let priceChange = (event) => {
-    
     const newPrice = event.target.value;
     setPrice(newPrice);
   };
@@ -52,38 +55,68 @@ function ModifyPost(props) {
     setCategory(event.target.value);
   };
 
-
   async function fetchPointsAndLocation() {
     try {
-      console.log('Fetching points and location...');
+      console.log("Fetching points and location...");
       console.log(user);
       const response = await fetch(`/api/check-points-and-location/${user.id}`);
-      console.log('Response:', response);
+      console.log("Response:", response);
       if (!response.ok) {
-        console.error('Fetch failed:', response.statusText);
+        console.error("Fetch failed:", response.statusText);
         return;
       }
       const data = await response.json();
-      console.log('Data:', data);
+      console.log("Data:", data);
       if (data.error) {
-        console.error('Error fetching points and location:', data.error);
+        console.error("Error fetching points and location:", data.error);
       } else {
         setPoints(data.points);
-        console.log('Points:', data.points);
-        console.log('City:', data.city);
-        console.log('street:', data.street);
-        console.log('zip:', data.zip);
-        setZipcode(data.zip);
-        setAddress(data.street+', '+ data.city +', ' + data.province);
+        console.log("Points:", data.points);
+        console.log("City:", data.city);
+        console.log("street:", data.street);
+        console.log("zip:", data.zip);
+        // setZipcode(data.zip);
+        // setAddress(data.street + ", " + data.city + ", " + data.province);
       }
     } catch (error) {
-      console.error('Error fetching points and location:', error);
+      console.error("Error fetching points and location:", error);
     }
   }
 
+  const handleFetchAddress = (event) => {
+    event.preventDefault();
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GEOCODING_API_KEY}`;
+
+          try {
+            const response = await fetch(geocodingUrl);
+            const data = await response.json();
+            if (data.status === "OK") {
+              const fetchedAddress = data.results[0].formatted_address;
+              setAddress(fetchedAddress);
+            } else {
+              console.error("Geocoding failed:", data.status);
+            }
+          } catch (error) {
+            console.error("Error fetching geocoding data:", error);
+          }
+        },
+        (error) => {
+          console.error("Geolocation error:", error);
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by your browser.");
+    }
+  };
+
   //when the user hit the submit button of the form
   const handleEdit = async () => {
-    //we also need to add a type checker to ensure numbers are numbers, strings are strings etc. 
+    //we also need to add a type checker to ensure numbers are numbers, strings are strings etc.
     if (Category === "Select Category" || isNaN(parseInt(Price))) {
       if (Category === "Select Category" && isNaN(parseInt(Price))) {
         setError("Please select a category and input a valid price.");
@@ -92,12 +125,14 @@ function ModifyPost(props) {
       } else if (isNaN(parseInt(Price))) {
         setError("Price given is invalid. Please try again.");
       }
-      }else if(parseInt(Price)>parseInt(points)) {
-        setError("You don't have enough points to post this task, please go to profile to deposit more points.");
-      }else {
-        //
-        console.log(Price  + '========' +OriginalPrice);
-       try{
+    } else if (parseInt(Price) > parseInt(points)) {
+      setError(
+        "You don't have enough points to post this task, please go to profile to deposit more points."
+      );
+    } else {
+      //
+      console.log(Price + "========" + OriginalPrice);
+      try {
         if (Price !== OriginalPrice) {
           // The price has changed, so we need to update the points
           if (Price > OriginalPrice) {
@@ -128,9 +163,8 @@ function ModifyPost(props) {
           // Update the original price
           setOriginalPrice(Price);
         }
-      
-          
-          await fetch("/api/edit-post", {
+
+        await fetch("/api/edit-post", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -210,7 +244,7 @@ function ModifyPost(props) {
           <Modal.Title>Edit or Delete</Modal.Title>
         </Modal.Header>
         <form id="contact-form" name="contact-form">
-          <Modal.Body>          
+          <Modal.Body>
             <select
               className={"category mb-2"}
               aria-label="category"
@@ -243,17 +277,19 @@ function ModifyPost(props) {
                 </div>
               </div>
             </div>
-            
+
             <div className="row">
               <div className="col-md-12">
-                <div className="md-form mb-0">     
-                  <label htmlFor="points" style={{ marginRight: '10px' }}>Points Balance:</label>
+                <div className="md-form mb-0">
+                  <label htmlFor="points" style={{ marginRight: "10px" }}>
+                    Points Balance:
+                  </label>
                   <span id="points">{points}</span>
                   <br />
                 </div>
               </div>
             </div>
-            <br/>
+            <br />
             <div className="row">
               <div className="col-md-12">
                 <div className="md-form mb-0">
@@ -298,17 +334,45 @@ function ModifyPost(props) {
               setGeoState={setGeoState}
               setZip={setZipcode}
             /> */}
-            <div className="row">
+            {/* <div className="row">
               <div className="col-md-12">
-                <div className="md-form mb-0">     
-                  <label htmlFor="location" style={{ marginRight: '10px' }}>Location:</label>
-                  <span id="location">{Address} {Zipcode}</span>
+                <div className="md-form mb-0">
+                  <label htmlFor="location" style={{ marginRight: "10px" }}>
+                    Location:
+                  </label>
+                  <span id="location">
+                    {Address} {Zipcode}
+                  </span>
                   <br />
                 </div>
               </div>
+            </div> */}
+            <div>
+              <input
+                type="text"
+                value={Address}
+                onChange={(e) => setAddress(e.target.value)}
+                placeholder="Enter address or fetch"
+              />
+              <button type="button" onClick={handleFetchAddress}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24.002"
+                  id="location"
+                >
+                  <g fill="none">
+                    <path d="M0 0h24v24.002H0z"></path>
+                    <path d="M0 0h24v24.002H0z"></path>
+                  </g>
+                  <g fill="#757575">
+                    <circle cx="12" cy="12.002" r="3"></circle>
+                    <path d="M22 11.002h-2.069A8.007 8.007 0 0 0 13 4.071V2.002h-2v2.069a8.008 8.008 0 0 0-6.931 6.931H2v2h2.069A8.008 8.008 0 0 0 11 19.933v2.069h2v-2.069a8.008 8.008 0 0 0 6.931-6.931H22v-2zm-10 7c-3.309 0-6-2.692-6-6s2.691-6 6-6 6 2.692 6 6-2.691 6-6 6z"></path>
+                  </g>
+                </svg>
+              </button>
             </div>
-
-            <p style={{color: "red"}}>{Error}</p>
+            <p style={{ color: "red" }}>{Error}</p>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="primary" onClick={handleEdit}>

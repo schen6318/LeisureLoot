@@ -4,8 +4,12 @@ import Map from "./map.js";
 import PropTypes from "prop-types";
 import CommentBox from "./CommentBox.js";
 import TakeOrderBox from "./TakeOrderBox.js";
+import GetAddress from "./GetAddress.js";
+import GetMap from "./GetMap";
+
 function MoreDetails(props) {
   console.log(props.json); // 这里打印props.json的内容
+  const [coordinates, setCoordinates] = useState({ lat: 0, lng: 0 });
 
   const [show, setShow] = useState(false);
 
@@ -18,7 +22,7 @@ function MoreDetails(props) {
         className={"moredetailbutton"}
         variant="primary"
         onClick={handleShow}
-        style={{ width:"100px"}}
+        style={{ width: "100px" }}
       >
         Details
       </button>
@@ -39,29 +43,30 @@ function MoreDetails(props) {
           <p>Price: {props.json["Ideal Price"]} points</p>
           <p>Address: {props.json.Address}</p>
           <p>Zip Code: {props.json["Zip Code"]}</p>
-          {/* <p>Location on Map:</p>
-          <Map
-            longitude={props.json.Longitude}
-            latitude={props.json.Latitude}
-          /> */}
+          <p>Location on Map:</p>
+          <div>
+            <GetAddress
+              address={props.json.Address}
+              onCoordinatesFetched={setCoordinates}
+            />
+            {coordinates && <GetMap center={coordinates} />}
+          </div>
         </Modal.Body>
         <Modal.Footer>
-          {
-          props.loginUsername !== props.json.username && 
+          {props.loginUsername !== props.json.username && (
             <TakeOrderBox
               json={props.json}
               loginStatus={props.loginStatus}
               loginUsername={props.loginUsername}
             />
-          }
-          {
-          props.loginUsername !== props.json.username && 
+          )}
+          {props.loginUsername !== props.json.username && (
             <CommentBox
-            json={props.json}
-            loginStatus={props.loginStatus}
-            loginUsername={props.loginUsername}
+              json={props.json}
+              loginStatus={props.loginStatus}
+              loginUsername={props.loginUsername}
             />
-          }
+          )}
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
