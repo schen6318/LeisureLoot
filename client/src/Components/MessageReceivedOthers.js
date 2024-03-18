@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import ReplyBox from "./ReplyBox.js";
 import FinishOrderBox from "./FinishOrderBox.js";
 import ChatBox from "./Chat.js";
+import TakeOrderBox from "./TakeOrderBox.js";
 
 function MessageReceivedOthers(props) {
   let [message, setMessage] = useState([]);
@@ -25,7 +26,7 @@ function MessageReceivedOthers(props) {
       fetch("/api/get-received-othermessage")
         .then((res) => res.json())
         .then((post) => {
-          // console.log("Got message", post);
+          console.log("Got message", post);
           setMessage(post.filter((item) => item.postid === props.postid));
         });
     }
@@ -119,6 +120,11 @@ function MessageReceivedOthers(props) {
             </table>
           </Modal.Body>
           <Modal.Footer>
+              <TakeOrderBox
+                json={{_id: props.postid, username: message[0].receiverUsername}}
+                loginStatus={props.loginStatus}
+                loginUsername={props.loginUsername}
+              />
             <Button variant="secondary" onClick={handleClose}>
               Close
             </Button>
