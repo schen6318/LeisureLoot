@@ -37,8 +37,7 @@ function AddPoints({ show, handleClose, userId }) {
       dispatch({
         type: "resetOptions",
         value: {
-          "client-id":
-            "Ad9FeB4Sa6bI-uP6YXN1nmC7wHjJn7DKm640VvnTclAp-qt-8J42TwFIt7m9yOQqj5nx4bxj1Ja6CH9G",
+          "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID,
           currency: "CAD",
           intent: "capture",
         },

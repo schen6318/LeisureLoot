@@ -4,6 +4,7 @@ import AddressAutoComplete from "./autocomplete";
 import { useUser, RefreshDataContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 
+const GEOCODING_API_KEY = process.env.REACT_APP_GEOCODING_API_KEY;
 
 function SubmitForm() {
   let [Subject, setSubject] = useState("");
@@ -40,55 +41,84 @@ function SubmitForm() {
     setSubject(event.target.value);
   };
 
-
   // useEffect(() => {
-    
+
   // }, []);
 
- 
-async function fetchPointsAndLocation() {
-  try {
-    console.log('Fetching points and location...');
-    console.log(user);
-    const response = await fetch(`/api/check-points-and-location/${user.id}`);
-    console.log('Response:', response);
-    if (!response.ok) {
-      console.error('Fetch failed:', response.statusText);
-      return;
+  async function fetchPointsAndLocation() {
+    try {
+      console.log("Fetching points and location...");
+      console.log(user);
+      const response = await fetch(`/api/check-points-and-location/${user.id}`);
+      console.log("Response:", response);
+      if (!response.ok) {
+        console.error("Fetch failed:", response.statusText);
+        return;
+      }
+      const data = await response.json();
+      console.log("Data:", data);
+      if (data.error) {
+        console.error("Error fetching points and location:", data.error);
+      } else {
+        setPoints(data.points);
+        console.log("Points:", data.points);
+        console.log("City:", data.city);
+        console.log("street:", data.street);
+        console.log("zip:", data.zip);
+        // setZipcode(data.zip);
+        // setAddress(data.street + ", " + data.city + ", " + data.province);
+      }
+    } catch (error) {
+      console.error("Error fetching points and location:", error);
     }
-    const data = await response.json();
-    console.log('Data:', data);
-    if (data.error) {
-      console.error('Error fetching points and location:', data.error);
-    } else {
-      setPoints(data.points);
-      console.log('Points:', data.points);
-      console.log('City:', data.city);
-      console.log('street:', data.street);
-      console.log('zip:', data.zip);
-      setZipcode(data.zip);
-      setAddress(data.street+', '+ data.city +', ' + data.province);
-    }
-  } catch (error) {
-    console.error('Error fetching points and location:', error);
   }
-}
 
-// Call fetchPointsAndLocation in handleShow
-const handleShow = () => {
-  setSubject("");
-  setCategory("Select Category");
-  setPrice("");
-  setDate("");
-  fetchPointsAndLocation();
-  setShow(true);
-};
+  // Call fetchPointsAndLocation in handleShow
+  const handleShow = () => {
+    setSubject("");
+    setCategory("Select Category");
+    setPrice("");
+    setDate("");
+    fetchPointsAndLocation();
+    setShow(true);
+  };
 
   let priceChange = (event) => {
     setPrice(event.target.value);
   };
   let dateChange = (event) => {
     setDate(event.target.value);
+  };
+
+  const handleFetchAddress = (event) => {
+    event.preventDefault();
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${GEOCODING_API_KEY}`;
+
+          try {
+            const response = await fetch(geocodingUrl);
+            const data = await response.json();
+            if (data.status === "OK") {
+              const fetchedAddress = data.results[0].formatted_address;
+              setAddress(fetchedAddress);
+            } else {
+              console.error("Geocoding failed:", data.status);
+            }
+          } catch (error) {
+            console.error("Error fetching geocoding data:", error);
+          }
+        },
+        (error) => {
+          console.error("Geolocation error:", error);
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by your browser.");
+    }
   };
 
   //when the user hit the submit button of the form
@@ -139,11 +169,11 @@ const handleShow = () => {
         setStatus("Open");
         setShow(false);
         // window.location.reload(true);
-        
+
         setRefreshData(true);
         // Wait for a short time before navigating to the new page
         setTimeout(() => {
-          navigate('/manage');
+          navigate("/manage");
         }, 100);
       } catch (e) {}
     }
@@ -171,8 +201,6 @@ const handleShow = () => {
           <Modal.Body>
             <div className="row">
               <div className="col-md-12">
-               
-                
                 <select
                   className="category my-3"
                   aria-label="category"
@@ -187,7 +215,6 @@ const handleShow = () => {
                     </option>
                   ))}
                 </select>
-               
               </div>
             </div>
 
@@ -211,15 +238,16 @@ const handleShow = () => {
             <div className="row">
               <div className="col-md-12">
                 <div className="md-form mb-0">
-                  
-                  <label htmlFor="points" style={{ marginRight: '10px' }}>Points balance:</label>
+                  <label htmlFor="points" style={{ marginRight: "10px" }}>
+                    Points balance:
+                  </label>
                   <span id="points">{points}</span>
                   <br />
                 </div>
               </div>
             </div>
 
-            <br/>
+            <br />
             <div className="row">
               <div className="col-md-12">
                 <div className="md-form mb-0">
@@ -263,19 +291,56 @@ const handleShow = () => {
               setZip={setZipcode}
             /> */}
 
-            <div className="row">
+            {/* <div className="row">
               <div className="col-md-12">
-                <div className="md-form mb-0">     
-                  <label htmlFor="location" style={{ marginRight: '10px' }}>Location from Profile:</label>
-                  <span id="location">{Address} {Zipcode}</span>
+                <div className="md-form mb-0">
+                  <label htmlFor="location" style={{ marginRight: "10px" }}>
+                    Location from Profile:
+                  </label>
+                  <span id="location">
+                    {Address} {Zipcode}
+                  </span>
                   <br />
                 </div>
               </div>
+            </div> */}
+            <div>
+              <label htmlFor="location" style={{ marginRight: "10px" }}>
+                Location:
+              </label>
+              <input
+                type="text"
+                value={Address}
+                onChange={(e) => setAddress(e.target.value)}
+                placeholder="Enter address or fetch"
+              />
+              <button type="button" onClick={handleFetchAddress}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24.002"
+                  id="location"
+                >
+                  <g fill="none">
+                    <path d="M0 0h24v24.002H0z"></path>
+                    <path d="M0 0h24v24.002H0z"></path>
+                  </g>
+                  <g fill="#757575">
+                    <circle cx="12" cy="12.002" r="3"></circle>
+                    <path d="M22 11.002h-2.069A8.007 8.007 0 0 0 13 4.071V2.002h-2v2.069a8.008 8.008 0 0 0-6.931 6.931H2v2h2.069A8.008 8.008 0 0 0 11 19.933v2.069h2v-2.069a8.008 8.008 0 0 0 6.931-6.931H22v-2zm-10 7c-3.309 0-6-2.692-6-6s2.691-6 6-6 6 2.692 6 6-2.691 6-6 6z"></path>
+                  </g>
+                </svg>
+              </button>
             </div>
-            <p style={{color: "red"}}>{Error}</p>
+
+            <p style={{ color: "red" }}>{Error}</p>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" htmlFor="subject" onClick={handleSubmit}>
+            <Button
+              variant="secondary"
+              htmlFor="subject"
+              onClick={handleSubmit}
+            >
               Submit
             </Button>
           </Modal.Footer>
