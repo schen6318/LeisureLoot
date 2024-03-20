@@ -175,25 +175,7 @@ function OfferHelpPage() {
             ))}
           </select>
         </div>
-        {/* <div className={"mt-1"}>
-          <select
-            value={State_selected}
-            aria-label={"state2"}
-            className="moredetailbutton"
-            onChange={(e) => {
-              setState_selected(e.target.value);
-            }}
-          >
-            <option key="all" value="Select States">
-              Select States
-            </option>
-            {States.map((p, i) => (
-              <option key={i} value={p}>
-                {p}
-              </option>
-            ))}
-          </select>
-        </div> */}
+        
         <div className={"mt-1"}>
           <label
             className={"font-weight-bold mt-0"}
