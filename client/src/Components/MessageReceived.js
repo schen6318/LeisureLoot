@@ -45,6 +45,7 @@ function MessageReceived(props) {
           id={"moreDetailModal"}
           onHide={handleClose}
           aria-labelledby="moreDetailModal"
+          size="lg"
         >
           <Modal.Header closeButton>
             <Modal.Title>Details</Modal.Title>
@@ -56,7 +57,7 @@ function MessageReceived(props) {
                   <th scope="col">#</th>
                   <th scope="col">From</th>
                   <th scope="col">Message</th>
-                  <th scope="col" colSpan="3">Action</th>
+                  <th scope="col">Action</th>
                 </tr>
               </thead>
               <tbody id="message_content">
@@ -80,26 +81,24 @@ function MessageReceived(props) {
                         loginUsername={props.loginUsername}
                       />
                     </td>
-                    <td>
-                      {
-                        p.message === "I would like to take order!" &&
-                      <ApproveBox
-                        json={p}
-                        loginStatus={props.loginStatus}
-                        loginUsername={props.loginUsername}
-                      />
-                      }
-                    </td>
-                    <td>
-                      {
-                        p.message === "I would like to take order!" &&
-                      <RejectBox
-                        json={p}
-                        loginStatus={props.loginStatus}
-                        loginUsername={props.loginUsername}
-                      />
-                      }
-                    </td>
+                    {p.message === "I would like to take order!" && (
+                      <>
+                        <td>
+                          <ApproveBox
+                            json={p}
+                            loginStatus={props.loginStatus}
+                            loginUsername={props.loginUsername}
+                          />
+                        </td>
+                        <td>
+                          <RejectBox
+                            json={p}
+                            loginStatus={props.loginStatus}
+                            loginUsername={props.loginUsername}
+                          />
+                        </td>
+                      </>
+                    )}
                     <td>
                       {
                         p.message === "I have finished the job. Please confirm!" &&

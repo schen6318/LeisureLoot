@@ -43,6 +43,7 @@ function MessageReceivedOthers(props) {
           id={"moreDetailModal"}
           onHide={handleClose}
           aria-labelledby="moreDetailModal"
+          size="lg"
         >
           <Modal.Header closeButton>
             <Modal.Title>Details</Modal.Title>

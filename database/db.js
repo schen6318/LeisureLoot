@@ -278,6 +278,10 @@ function myDB() {
   };
 
   myDB.retrieveReceivedMessage = async (req, res) => {
+    if (!req.user) {
+      res.status(401).json({ error: 'Not authenticated' });
+      return;
+    }
     const filter = { receiverUsername: req.user.username };
     const messagedb = project_database.collection("message");
     const result = await messagedb.find(filter).toArray();
