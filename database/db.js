@@ -107,10 +107,8 @@ function myDB() {
     }
   };
 
-  //以下来自于Bob
   myDB.insert_post = async (req, res) => {
     let feedback_database;
-    //Sophia修改：因为提交need时去掉了选择offerHelp，都是seekHelp，所以这里不需要判断了
     feedback_database = project_database.collection("posts");
 
     req.body["username"] = req.user.username;
@@ -180,9 +178,6 @@ function myDB() {
     }
     const helpSeeker_db = project_database.collection("posts");
     const result1 = await helpSeeker_db.find(query2).toArray();
-    // const helpOffer_db = project_database.collection("helper");
-    // const result2 = await helpOffer_db.find(query2).toArray();
-    // let result = await result1.concat(result2);
     res.send(result1);
     return result1;
   };
@@ -304,22 +299,17 @@ function myDB() {
     }
   };
 
-  //Sophia: get user points and location
+  //Sophia: get user points
 
-  myDB.getPointsAndLocation = async (userId) => {
+  myDB.getPoints = async (userId) => {
   const collection = project_database.collection("userProfile");
   const idString = userId.$oid;
   try {    
     const result = await collection.findOne({ _id: new ObjectId(userId) });
     if (result) {
-      
-      // return result;
+
       return {
-        points: result.points,
-        province: result.province,
-        city: result.city,
-        street: result.street,
-        zip: result.zip
+        points: result.points
       };
       
     } else {

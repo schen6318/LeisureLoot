@@ -31,7 +31,6 @@ function PostForm2() {
           });
       } else if (isLoggedIn) { 
         setLogin(true);
-        console.log("=========");
         console.log(user);
       }
     }
@@ -55,10 +54,8 @@ function PostForm2() {
               <th scope="col">Category</th>
               <th scope="col">Description</th>
               <th scope="col">Price (points)</th>
-              <th scope="col">Date for task</th>
-              <th scope="col">Zip Code</th>
+              <th scope="col">Date for task</th>           
               <th scope="col">Address</th>
-              
               <th scope="col">Post Status</th>
               <th scope="col">Comments</th>
               <th scope="col">Action</th>
@@ -72,10 +69,8 @@ function PostForm2() {
                 <td>{p.Category}</td>
                 <td>{p.Description}</td>
                 <td>{p["Ideal Price"]}</td>
-                <td>{p["Date for task"]}</td>
-                <td>{p["Zip Code"]}</td>
-                <td>{p.Address}</td>
-                
+                <td>{p["Date for task"]}</td>   
+                <td>{p.Address}</td>    
                 <td>{p.Status}</td>
                 <td>
                   <MessageReceived postid={p._id} loginStatus={login} loginUsername={loginUsername}/>
@@ -128,8 +123,7 @@ function PostForm2() {
               <th scope="col">Price (points)</th>
               <th scope="col">Date for task</th>
               <th scope="col">Zip Code</th>
-              <th scope="col">Address</th>
-              
+              <th scope="col">Address</th>         
               <th scope="col">Post Status</th>
               <th scope="col">Comments</th>
             </tr>

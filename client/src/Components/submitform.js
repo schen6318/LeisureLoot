@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Button, Modal } from "react-bootstrap";
-import AddressAutoComplete from "./autocomplete";
 import { useUser, RefreshDataContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 
@@ -45,11 +44,11 @@ function SubmitForm() {
 
   // }, []);
 
-  async function fetchPointsAndLocation() {
+  async function fetchPoints() {
     try {
-      console.log("Fetching points and location...");
+      console.log("Fetching points...");
       console.log(user);
-      const response = await fetch(`/api/check-points-and-location/${user.id}`);
+      const response = await fetch(`/api/check-points/${user.id}`);
       console.log("Response:", response);
       if (!response.ok) {
         console.error("Fetch failed:", response.statusText);
@@ -58,28 +57,23 @@ function SubmitForm() {
       const data = await response.json();
       console.log("Data:", data);
       if (data.error) {
-        console.error("Error fetching points and location:", data.error);
+        console.error("Error fetching points:", data.error);
       } else {
         setPoints(data.points);
         console.log("Points:", data.points);
-        console.log("City:", data.city);
-        console.log("street:", data.street);
-        console.log("zip:", data.zip);
-        // setZipcode(data.zip);
-        // setAddress(data.street + ", " + data.city + ", " + data.province);
       }
     } catch (error) {
-      console.error("Error fetching points and location:", error);
+      console.error("Error fetching points:", error);
     }
   }
 
-  // Call fetchPointsAndLocation in handleShow
+  // Call fetchPoints in handleShow
   const handleShow = () => {
     setSubject("");
     setCategory("Select Category");
     setPrice("");
     setDate("");
-    fetchPointsAndLocation();
+    fetchPoints();
     setShow(true);
   };
 
@@ -168,8 +162,6 @@ function SubmitForm() {
 
         setStatus("Open");
         setShow(false);
-        // window.location.reload(true);
-
         setRefreshData(true);
         // Wait for a short time before navigating to the new page
         setTimeout(() => {
@@ -282,37 +274,16 @@ function SubmitForm() {
               </div>
             </div>
 
-            {/* <AddressAutoComplete
-              initialaddress={Address}
-              setaddress={setAddress}
-              setlatitude={setLatitude}
-              setlongitude={setLongitude}
-              setGeoState={setState}
-              setZip={setZipcode}
-            /> */}
-
-            {/* <div className="row">
-              <div className="col-md-12">
-                <div className="md-form mb-0">
-                  <label htmlFor="location" style={{ marginRight: "10px" }}>
-                    Location from Profile:
-                  </label>
-                  <span id="location">
-                    {Address} {Zipcode}
-                  </span>
-                  <br />
-                </div>
-              </div>
-            </div> */}
+            
             <div>
               <label htmlFor="location" style={{ marginRight: "10px" }}>
                 Location:
               </label>
-              <input
+              <input style={{width: "75%"}}
                 type="text"
                 value={Address}
                 onChange={(e) => setAddress(e.target.value)}
-                placeholder="Enter address or fetch"
+                placeholder="Enter in the format: Street, City, State Zip Code or fetch"
               />
               <button type="button" onClick={handleFetchAddress}>
                 <svg
@@ -331,8 +302,9 @@ function SubmitForm() {
                   </g>
                 </svg>
               </button>
+              
             </div>
-
+            
             <p style={{ color: "red" }}>{Error}</p>
           </Modal.Body>
           <Modal.Footer>

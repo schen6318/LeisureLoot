@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Button, Modal } from "react-bootstrap";
-import AddressAutoComplete from "./autocomplete";
 import PropTypes from "prop-types";
 import { useUser, RefreshDataContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
@@ -55,11 +54,11 @@ function ModifyPost(props) {
     setCategory(event.target.value);
   };
 
-  async function fetchPointsAndLocation() {
+  async function fetchPoints() {
     try {
-      console.log("Fetching points and location...");
+      console.log("Fetching points...");
       console.log(user);
-      const response = await fetch(`/api/check-points-and-location/${user.id}`);
+      const response = await fetch(`/api/check-points/${user.id}`);
       console.log("Response:", response);
       if (!response.ok) {
         console.error("Fetch failed:", response.statusText);
@@ -68,18 +67,14 @@ function ModifyPost(props) {
       const data = await response.json();
       console.log("Data:", data);
       if (data.error) {
-        console.error("Error fetching points and location:", data.error);
+        console.error("Error fetching points:", data.error);
       } else {
         setPoints(data.points);
         console.log("Points:", data.points);
-        console.log("City:", data.city);
-        console.log("street:", data.street);
-        console.log("zip:", data.zip);
-        // setZipcode(data.zip);
-        // setAddress(data.street + ", " + data.city + ", " + data.province);
+        
       }
     } catch (error) {
-      console.error("Error fetching points and location:", error);
+      console.error("Error fetching points", error);
     }
   }
 
@@ -130,8 +125,7 @@ function ModifyPost(props) {
         "You don't have enough points to post this task, please go to profile to deposit more points."
       );
     } else {
-      //
-      console.log(Price + "========" + OriginalPrice);
+     
       try {
         if (Price !== OriginalPrice) {
           // The price has changed, so we need to update the points
@@ -147,7 +141,7 @@ function ModifyPost(props) {
               }),
             });
           } else if (Price < OriginalPrice) {
-            // The price has decreased, so we need to add the difference to the user's points
+            // The price has decreased, so add the difference to the user's points
             const pointsToAdd = OriginalPrice - Price;
             await fetch("/api/update-points", {
               method: "POST",
@@ -225,7 +219,7 @@ function ModifyPost(props) {
   const handleClose = () => setShow(false);
   const handleShow = () => {
     setShow(true);
-    fetchPointsAndLocation();
+    fetchPoints();
   };
 
   return (
@@ -245,13 +239,14 @@ function ModifyPost(props) {
         </Modal.Header>
         <form id="contact-form" name="contact-form">
           <Modal.Body>
+            <label>Category:</label>          
             <select
               className={"category mb-2"}
               aria-label="category"
               value={Category}
               onChange={categoryChange}
             >
-              {/*<Categories />*/}
+              
               {categoryOptions.map((p, i) => (
                 <option key={"categoryoption" + i} value={p}>
                   {p}
@@ -326,33 +321,13 @@ function ModifyPost(props) {
               </div>
             </div>
 
-            {/* <AddressAutoComplete
-              initialaddress={Address}
-              setaddress={setAddress}
-              setlatitude={setLatitude}
-              setlongitude={setLongitude}
-              setGeoState={setGeoState}
-              setZip={setZipcode}
-            /> */}
-            {/* <div className="row">
-              <div className="col-md-12">
-                <div className="md-form mb-0">
-                  <label htmlFor="location" style={{ marginRight: "10px" }}>
-                    Location:
-                  </label>
-                  <span id="location">
-                    {Address} {Zipcode}
-                  </span>
-                  <br />
-                </div>
-              </div>
-            </div> */}
             <div>
-              <input
+              <label>Location:</label>
+              <input style={{ width: "80%" }}
                 type="text"
                 value={Address}
                 onChange={(e) => setAddress(e.target.value)}
-                placeholder="Enter address or fetch"
+                placeholder=""
               />
               <button type="button" onClick={handleFetchAddress}>
                 <svg
@@ -371,6 +346,7 @@ function ModifyPost(props) {
                   </g>
                 </svg>
               </button>
+              <p>Please follow the format: Street, City, State Zip Code or fetch</p>
             </div>
             <p style={{ color: "red" }}>{Error}</p>
           </Modal.Body>
