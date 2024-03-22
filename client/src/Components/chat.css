@@ -137,3 +137,9 @@
   flex-grow: 1;
   overflow-y: auto;
 }
+
+.hoverable-cell:hover {
+  background-color: #e8e8e8;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}

@@ -11,7 +11,6 @@ function MessageReceivedOthers(props) {
   const [show, setShow] = useState(false);
   const [receiver, setReceiver] = useState("");
   const [chatBoxShow, setChatBoxShow] = useState(false);
-  const [hover, setHover] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -58,6 +57,7 @@ function MessageReceivedOthers(props) {
             <Modal.Title>Details</Modal.Title>
           </Modal.Header>
           <Modal.Body>
+            <h6>Note: Click username to start REAL-TIME Chat!</h6>
             <table className="table">
               <thead>
                 <tr>
@@ -76,16 +76,17 @@ function MessageReceivedOthers(props) {
                   return (
                     <tr key={i}>
                       <th>{i + 1}</th>
-                      <td>{p.senderUsername}</td>
+                      <td>{p.receiverUsername}</td>
                       <td
-                        style={{
-                          cursor: "pointer",
-                          backgroundColor: hover ? "#e8e8e8" : "transparent",
-                          transition: "background-color 0.3s",
-                        }}
-                        onMouseEnter={() => setHover(true)}
-                        onMouseLeave={() => setHover(false)}
-                        onClick={() => openChat(p.receiverUsername)}
+                        className={
+                          p.receiverUsername !== props.loginUsername
+                            ? "hoverable-cell"
+                            : ""
+                        }
+                        onClick={() =>
+                          p.receiverUsername !== props.loginUsername &&
+                          openChat(p.receiverUsername)
+                        }
                       >
                         {p.receiverUsername}
                       </td>
