@@ -30,7 +30,7 @@ function CommentBox(props) {
       body: JSON.stringify({
         _id: postid,
         Mode: "SeekHelp",
-        Status: "Pending",
+        Status: "Open",
       }),
     });
     setShow(false);

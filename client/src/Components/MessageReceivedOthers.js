@@ -105,7 +105,7 @@ function MessageReceivedOthers(props) {
                         )}
                       </td>
                       <td>
-                        {p.message === "Your order has been approved!" && (
+                        {p.message === "Your order has been approved!" && props.status === "Approved" && (
                           <FinishOrderBox
                             json={p}
                             loginStatus={props.loginStatus}

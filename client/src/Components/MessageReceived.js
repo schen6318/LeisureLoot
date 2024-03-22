@@ -101,9 +101,9 @@ function MessageReceived(props) {
                         loginStatus={props.loginStatus}
                         loginUsername={props.loginUsername}
                       />
-                    </td>
+                    </td>                   
                     <td>
-                      {p.message === "I would like to take order!" && (
+                      {p.message === "I would like to take order!" && props.status === "Open" && (
                         <ApproveBox
                           json={p}
                           loginStatus={props.loginStatus}
@@ -112,7 +112,7 @@ function MessageReceived(props) {
                       )}
                     </td>
                     <td>
-                      {p.message === "I would like to take order!" && (
+                      {p.message === "I would like to take order!" && props.status === "Open" && (
                         <RejectBox
                           json={p}
                           loginStatus={props.loginStatus}
@@ -122,7 +122,7 @@ function MessageReceived(props) {
                     </td>
                     <td>
                       {p.message ===
-                        "I have finished the job. Please confirm!" && (
+                        "I have finished the job. Please confirm!" && props.status === "Finished" && (
                         <ConfirmBox
                           json={p}
                           loginStatus={props.loginStatus}

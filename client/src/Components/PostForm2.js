@@ -73,7 +73,7 @@ function PostForm2() {
                 <td>{p.Address}</td>    
                 <td>{p.Status}</td>
                 <td>
-                  <MessageReceived postid={p._id} loginStatus={login} loginUsername={loginUsername}/>
+                  <MessageReceived status={p.Status} postid={p._id} loginStatus={login} loginUsername={loginUsername}/>
                 </td>
                 <td>
                   <ModifyPost information={p} />
@@ -142,7 +142,7 @@ function PostForm2() {
                 
                 <td>{p.Status}</td>
                 <td>
-                  <MessageReceivedOthers postid={p._id} loginStatus={login} loginUsername={loginUsername}/>
+                  <MessageReceivedOthers status={p.Status} postid={p._id} loginStatus={login} loginUsername={loginUsername}/>
                 </td>
               </tr>
             ))}
