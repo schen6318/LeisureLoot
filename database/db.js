@@ -196,13 +196,18 @@ function myDB() {
     }
     const message_db = project_database.collection("message");
     const messagefilter_db = await message_db.find(query1).toArray();
-    const postidArray = messagefilter_db.map(doc => doc.postid);
+    const postidArray = messagefilter_db.map((doc) => doc.postid);
     const uniquePostidArray = [...new Set(postidArray)];
 
-    const objectIdArray = uniquePostidArray.map(id => new ObjectId(id));
+    const objectIdArray = uniquePostidArray.map((id) => new ObjectId(id));
 
     const post_db = project_database.collection("posts");
-    const posts = await post_db.find({ username: { $ne: req.user.username }, _id: { $in: objectIdArray } }).toArray();
+    const posts = await post_db
+      .find({
+        username: { $ne: req.user.username },
+        _id: { $in: objectIdArray },
+      })
+      .toArray();
 
     res.send(posts);
     return posts;
@@ -271,7 +276,12 @@ function myDB() {
   };
 
   myDB.retrieveReceivedOtherMessage = async (req, res) => {
-    const filter = { $or: [{ senderUsername: req.user.username }, { receiverUsername: req.user.username }] };
+    const filter = {
+      $or: [
+        { senderUsername: req.user.username },
+        { receiverUsername: req.user.username },
+      ],
+    };
     const messagedb = project_database.collection("message");
     const result = await messagedb.find(filter).toArray();
     console.log(result);
@@ -307,28 +317,26 @@ function myDB() {
   //Sophia: get user points and location
 
   myDB.getPointsAndLocation = async (userId) => {
-  const collection = project_database.collection("userProfile");
-  const idString = userId.$oid;
-  try {    
-    const result = await collection.findOne({ _id: new ObjectId(userId) });
-    if (result) {
-      
-      // return result;
-      return {
-        points: result.points,
-        province: result.province,
-        city: result.city,
-        street: result.street,
-        zip: result.zip
-      };
-      
-    } else {
-      return { error: "Points not found" };
+    const collection = project_database.collection("userProfile");
+    const idString = userId.$oid;
+    try {
+      const result = await collection.findOne({ _id: new ObjectId(userId) });
+      if (result) {
+        // return result;
+        return {
+          points: result.points,
+          province: result.province,
+          city: result.city,
+          street: result.street,
+          zip: result.zip,
+        };
+      } else {
+        return { error: "Points not found" };
+      }
+    } catch (e) {
+      console.error("Error getting user points from DB:", e);
+      throw e;
     }
-  } catch (e) {
-    console.error("Error getting user points from DB:", e);
-    throw e;
-  }
   };
 
   //deduct points
@@ -348,7 +356,7 @@ function myDB() {
     }
   };
 
-  //iteration2-bob: after confirmation, transfer points to offer-help user 
+  //iteration2-bob: after confirmation, transfer points to offer-help user
   myDB.transfer_points = async (req, res) => {
     let target_database1;
     let target_database2;
@@ -363,12 +371,12 @@ function myDB() {
     const post = await target_database1.findOne(query1);
     const points = post["Ideal Price"];
 
-    const query2 = { username: json.username }; 
+    const query2 = { username: json.username };
     const targetUser = await target_database2.findOne(query2);
 
-    const query3 = { _id: new ObjectId(targetUser._id)};
+    const query3 = { _id: new ObjectId(targetUser._id) };
     const targetUserProfile = await target_database3.findOne(query3);
-    
+
     const newPoints = targetUserProfile.points + points;
     const update = {
       $set: {
