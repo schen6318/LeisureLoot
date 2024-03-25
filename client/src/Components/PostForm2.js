@@ -122,7 +122,7 @@ function PostForm2() {
               <th scope="col">Description</th>
               <th scope="col">Price (points)</th>
               <th scope="col">Date for task</th>
-              <th scope="col">Zip Code</th>
+              
               <th scope="col">Address</th>         
               <th scope="col">Post Status</th>
               <th scope="col">Comments</th>
@@ -137,7 +137,7 @@ function PostForm2() {
                 <td>{p.Description}</td>
                 <td>{p["Ideal Price"]}</td>
                 <td>{p["Date for task"]}</td>
-                <td>{p["Zip Code"]}</td>
+                
                 <td>{p.Address}</td>
                 
                 <td>{p.Status}</td>

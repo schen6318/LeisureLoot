@@ -45,7 +45,7 @@ function CommentBox(props) {
     });
 
     setShow(false);
-    //window.location.reload(true);
+    window.location.reload(true);
   };
 
   useEffect(() => {
