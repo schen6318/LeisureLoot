@@ -26,7 +26,24 @@ function Profile() {
 
   const [showAddPoints, setShowAddPoints] = useState(false);
 
+  const [errors, setErrors] = useState({
+    fullName: "",
+    phone: "",
+    street: "",
+    city: "",
+    province: "",
+    zip: "",
+  });
+
   useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user"));
+    if (userData && userData.username) {
+      setProfile((prevProfile) => ({
+        ...prevProfile,
+        email: userData.username,
+      }));
+    }
+
     if (userId) {
       fetchUserProfile(userId);
     } else {
@@ -45,6 +62,25 @@ function Profile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const newErrors = {
+      fullName: profile.fullName ? "" : "Full Name is required",
+      phone: profile.phone ? "" : "Phone is required",
+      street: profile.street ? "" : "Street is required",
+      city: profile.city ? "" : "City is required",
+      province: profile.province ? "" : "Province is required",
+      zip: profile.zip ? "" : "Zip Code is required",
+    };
+
+    setErrors(newErrors);
+
+    const hasErrors = Object.values(newErrors).some((error) => error !== "");
+
+    if (hasErrors) {
+      console.error("Validation failed");
+      return;
+    }
+
     try {
       const response = await fetch(`/api/profile/${userId}`, {
         method: "POST",
@@ -110,7 +146,7 @@ function Profile() {
 
   return (
     <>
-      <Navbar login={login}/>
+      <Navbar login={login} />
       <header className="text-center text-white bg-primary masthead">
         <h1 style={{ fontSize: "3rem" }}>My Profile</h1>
       </header>
@@ -198,7 +234,7 @@ function Profile() {
                           Personal Details
                         </h6>
                         <div className="form-group">
-                          <label htmlFor="fullName">Full Name</label>
+                          <label htmlFor="fullName">Full Name*</label>
                           <input
                             type="text"
                             className="form-control"
@@ -208,9 +244,12 @@ function Profile() {
                             onChange={handleChange}
                             placeholder="Enter full name"
                           />
+                          {errors.fullName && (
+                            <div className="text-danger">{errors.fullName}</div>
+                          )}
                         </div>
                         <div className="form-group">
-                          <label htmlFor="email">Email</label>
+                          <label htmlFor="email">Email*</label>
                           <input
                             type="email"
                             className="form-control"
@@ -218,7 +257,8 @@ function Profile() {
                             name="email"
                             value={profile.email}
                             onChange={handleChange}
-                            placeholder="Enter email"
+                            readOnly
+                            style={{ backgroundColor: "#e9ecef" }}
                           />
                         </div>
                         <div className="form-group">
@@ -226,7 +266,7 @@ function Profile() {
                             className="form-label form-label"
                             htmlFor="phone"
                           >
-                            Phone
+                            Phone*
                           </label>
                           <input
                             type="text"
@@ -237,6 +277,9 @@ function Profile() {
                             onChange={handleChange}
                             placeholder="Enter phone number"
                           />
+                          {errors.fullName && (
+                            <div className="text-danger">{errors.phone}</div>
+                          )}
                         </div>
                         <div className="form-group">
                           <label
@@ -268,7 +311,7 @@ function Profile() {
                           Address
                         </h6>
                         <div className="form-group">
-                          <label htmlFor="street">Street</label>
+                          <label htmlFor="street">Street*</label>
                           <input
                             type="text"
                             className="form-control"
@@ -277,14 +320,17 @@ function Profile() {
                             value={profile.street}
                             onChange={handleChange}
                             placeholder="Enter Street"
-                          />
+                          />{" "}
+                          {errors.fullName && (
+                            <div className="text-danger">{errors.street}</div>
+                          )}
                         </div>
                         <div className="form-group">
                           <label
                             className="form-label form-label"
                             htmlFor="city"
                           >
-                            City
+                            City*
                           </label>
                           <input
                             type="text"
@@ -294,14 +340,17 @@ function Profile() {
                             value={profile.city}
                             onChange={handleChange}
                             placeholder="Enter City"
-                          />
+                          />{" "}
+                          {errors.fullName && (
+                            <div className="text-danger">{errors.city}</div>
+                          )}
                         </div>
                         <div className="form-group">
                           <label
                             className="form-label form-label"
                             htmlFor="province"
                           >
-                            Province
+                            Province*
                           </label>
                           <input
                             type="text"
@@ -311,14 +360,17 @@ function Profile() {
                             value={profile.province}
                             onChange={handleChange}
                             placeholder="Enter Province"
-                          />
+                          />{" "}
+                          {errors.fullName && (
+                            <div className="text-danger">{errors.province}</div>
+                          )}
                         </div>
                         <div className="form-group">
                           <label
                             className="form-label form-label"
                             htmlFor="zip"
                           >
-                            Zip Code
+                            Zip Code*
                           </label>
                           <input
                             type="text"
@@ -328,7 +380,10 @@ function Profile() {
                             value={profile.zip}
                             onChange={handleChange}
                             placeholder="Enter Zip Code"
-                          />
+                          />{" "}
+                          {errors.fullName && (
+                            <div className="text-danger">{errors.zip}</div>
+                          )}
                         </div>
                       </div>
                     </div>
