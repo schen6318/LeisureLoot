@@ -76,7 +76,19 @@ function MessageReceivedOthers(props) {
                   return (
                     <tr key={i}>
                       <th>{i + 1}</th>
-                      <td>{p.receiverUsername}</td>
+                      <td
+                      className={
+                        p.senderUsername !== props.loginUsername
+                          ? "hoverable-cell"
+                          : ""
+                      }
+                      onClick={() =>
+                        p.senderUsername !== props.loginUsername &&
+                        openChat(p.senderUsername)
+                      }
+                    >
+                      {p.senderUsername}
+                    </td>
                       <td
                         className={
                           p.receiverUsername !== props.loginUsername

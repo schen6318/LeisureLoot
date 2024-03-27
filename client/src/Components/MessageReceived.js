@@ -64,6 +64,7 @@ function MessageReceived(props) {
                 <tr>
                   <th scope="col">#</th>
                   <th scope="col">From</th>
+                  <th scope="col">To</th>
                   <th scope="col">Message</th>
                   <th scope="col" colSpan="3">
                     Action
@@ -87,6 +88,19 @@ function MessageReceived(props) {
                     >
                       {p.senderUsername}
                     </td>
+                    <td
+                        className={
+                          p.receiverUsername !== props.loginUsername
+                            ? "hoverable-cell"
+                            : ""
+                        }
+                        onClick={() =>
+                          p.receiverUsername !== props.loginUsername &&
+                          openChat(p.receiverUsername)
+                        }
+                      >
+                        {p.receiverUsername}
+                      </td>
                     <td>{p.message}</td>
                     <ChatBox
                       show={chatBoxShow}
