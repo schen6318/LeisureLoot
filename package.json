@@ -19,6 +19,8 @@
     "fs": "^0.0.1-security",
     "mongoose": "^8.1.1",
     "passport": "^0.7.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "react-slick": "^0.30.2",
+    "slick-carousel": "^1.8.1"
   }
 }
